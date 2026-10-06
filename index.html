@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#7fb6e6">
+<title>校長先生のお話</title>
+<style>
+:root{--ink:#1c2433;--paper:#fffbe8;--gold:#ffcf3a;--red:#e0442f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#7fb6e6;color:var(--ink);overscroll-behavior:none;
+  font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;font-weight:800}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+button{font:inherit;color:inherit;cursor:pointer}
+.hide{display:none!important}
+#hud{position:fixed;inset:0;pointer-events:none}
+.top{position:absolute;left:0;right:0;top:0;padding:max(8px,env(safe-area-inset-top)) 10px 0}
+#topic{background:#fffbe8e6;border:3px solid var(--ink);border-radius:10px;padding:5px 10px;font-size:15px;text-align:center;box-shadow:0 3px 0 #0003}
+.stats{display:flex;gap:8px;margin-top:6px}
+.stat{flex:1;background:#fffbe8e6;border:3px solid var(--ink);border-radius:10px;padding:3px 8px;font-size:12px}
+.stat b{font-size:22px;color:var(--red)}
+.bar{height:8px;border:2px solid var(--ink);border-radius:6px;background:#fff;overflow:hidden;margin-top:2px}
+.bar i{display:block;height:100%;width:0;transition:width .3s}
+#bFat i{background:linear-gradient(90deg,#7bdc7a,#ffd23a,#ff4a3a)}
+#bHeat i{background:linear-gradient(90deg,#7ab7ff,#ffd23a,#ff5a1a)}
+#bubble{position:absolute;left:10px;right:10px;top:132px;background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:10px 12px;font-size:16px;line-height:1.5;min-height:60px;box-shadow:0 4px 0 #0003}
+#bubble:after{content:"";position:absolute;left:50%;bottom:-14px;margin-left:-10px;border:10px solid transparent;border-top-color:var(--ink);border-bottom:0}
+#bubble small{display:block;font-size:11px;opacity:.6;margin-bottom:2px}
+#pop{position:absolute;left:0;right:0;top:44%;text-align:center;font-size:34px;color:#fff;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:0 3px 0 var(--ink);opacity:0}
+#pop.show{animation:pop 1.2s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:scale(.5)}15%{opacity:1;transform:scale(1.15)}80%{opacity:1}100%{opacity:0;transform:translateY(-30px)}}
+#emo{position:absolute;inset:0;overflow:hidden}
+#emo span{position:absolute;bottom:30%;font-size:30px;animation:rise 2.2s ease-out forwards}
+@keyframes rise{to{transform:translateY(-220px) rotate(20deg);opacity:0}}
+#toast{position:absolute;left:12px;right:12px;top:max(8px,env(safe-area-inset-top));background:#2a2f45;color:#fff;border:3px solid var(--gold);border-radius:12px;padding:8px 12px;display:flex;gap:10px;align-items:center;transform:translateY(-120px);transition:transform .35s;z-index:5}
+#toast.on{transform:none}#toast .ic{font-size:30px}#toast small{display:block;font-size:11px;opacity:.8}
+.bot{position:absolute;left:0;right:0;bottom:0;padding:8px 10px max(10px,env(safe-area-inset-bottom));background:linear-gradient(#0000,#0006 30%);pointer-events:auto}
+#chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+#chips button{flex:none;border:2px solid var(--ink);background:#fff;border-radius:16px;padding:4px 10px;font-size:13px}
+.inrow{display:flex;gap:6px}
+#inp{flex:1;min-width:0;font:inherit;font-size:17px;padding:10px;border:3px solid var(--ink);border-radius:10px;background:#fff}
+.go{border:3px solid var(--ink);background:var(--red);color:#fff;border-radius:10px;padding:0 14px;font-size:16px;box-shadow:0 3px 0 #0005}
+.go:disabled{opacity:.5}
+.mini{display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:#fff;text-shadow:0 1px 2px #000}
+.mini button{background:#0006;border:2px solid #fff8;border-radius:8px;color:#fff;padding:3px 9px;font-size:12px}
+.panel{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;text-align:center;overflow:auto;background:linear-gradient(#a9d8ffee,#fff5d0f2);z-index:4}
+.logo{font-size:40px;line-height:1.15;margin:0;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;color:#fff;text-shadow:0 4px 0 var(--ink)}
+.logo small{display:block;font-size:14px;-webkit-text-stroke:0;color:var(--ink);text-shadow:none;letter-spacing:.2em}
+.btn{width:min(86vw,320px);padding:13px 10px;font-size:19px;background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:12px;box-shadow:0 5px 0 var(--ink)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--ink)}
+.btn.sub{background:#fff;color:var(--ink);font-size:16px}
+.small{font-size:13px;line-height:1.6;max-width:330px}
+.list{width:min(92vw,360px);text-align:left;font-size:14px}
+.list .a{display:flex;gap:8px;align-items:center;background:#fff;border:2px solid var(--ink);border-radius:10px;padding:6px 8px;margin-bottom:6px}
+.list .a.lock{opacity:.45;filter:grayscale(1)}.list .ic{font-size:26px}.list small{display:block;font-weight:600;opacity:.75;font-size:12px}
+#score{font-size:64px;color:var(--red);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud" class="hide">
+  <div class="top">
+    <div id="topic">朝礼</div>
+    <div class="stats">
+      <div class="stat">倒れた <b id="nFaint">0</b>/100<div class="bar" id="bFat"><i></i></div></div>
+      <div class="stat">暑さ<div class="bar" id="bHeat"><i></i></div><span id="left" style="font-size:11px">あと6話</span></div>
+    </div>
+  </div>
+  <div id="bubble"><small>校長先生</small><span id="said">…</span></div>
+  <div id="pop"></div><div id="emo"></div>
+  <div class="bot">
+    <div id="chips"></div>
+    <div class="inrow"><input id="inp" maxlength="60" autocomplete="off" placeholder="お話のテーマを入力 (例: 夏休み)"><button class="go" id="bGo">話す</button></div>
+    <div class="mini"><span id="hintTxt">ヒント: キーワードで事件が起きる!</span><span><button id="bView">視点</button> <button id="bEnd">以上です</button> <button id="bAch">🏆</button></span></div>
+  </div>
+</div>
+<div id="toast"><span class="ic" id="tIc">🏆</span><div><b id="tName"></b><small id="tDesc"></small></div></div>
+
+<div id="title" class="panel">
+  <h1 class="logo"><small>全校集会シミュレーター</small>校長先生の<br>お話が長すぎる</h1>
+  <div class="small">校長先生に話させる内容を自由に入力して、<br>全校生徒<b>100人</b>をどれだけ倒せるか挑戦!<br>「夏」「小学生」「SDGs」「給食」…<br>キーワードで<b>事件</b>も起きるぞ。</div>
+  <button class="btn" id="bStart">朝礼をはじめる</button>
+  <button class="btn sub" id="bAch2">🏆 実績</button>
+  <div class="small" id="best"></div>
+</div>
+<div id="result" class="panel hide">
+  <div class="small">今日の朝礼の結果</div><div id="score">0人</div>
+  <div id="rank" style="font-size:22px"></div><div class="small" id="resSub"></div>
+  <button class="btn" id="bShare">結果をシェア</button>
+  <button class="btn" id="bAgain">もう一度</button><button class="btn sub" id="bAch3">🏆 実績</button>
+</div>
+<div id="achP" class="panel hide" style="justify-content:flex-start"><h2 style="margin:8px 0">🏆 実績 <span id="achN"></span></h2><div class="list" id="achList"></div><button class="btn sub" id="bAchBack">もどる</button></div>
+<div id="loading" class="panel" style="z-index:9"><h1 class="logo" style="font-size:24px">読み込み中…</h1></div>
+
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+/* ================= シーン ================= */
+const canvas=$('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
+const scene=new THREE.Scene();
+const SKY_A=new THREE.Color(0x7fc0f0),SKY_HOT=new THREE.Color(0xffa860),SKY_COLD=new THREE.Color(0xbfd4e6),SKY_DARK=new THREE.Color(0x6a7a90);
+scene.background=SKY_A.clone();scene.fog=new THREE.Fog(0x7fc0f0,40,90);
+const camera=new THREE.PerspectiveCamera(60,1,.1,150);
+const hemi=new THREE.HemisphereLight(0xffffff,0x9a8a6a,1.15);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xfff2d0,2.2);sun.position.set(6,14,10);sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-10,right:10,top:16,bottom:-16,near:1,far:50});scene.add(sun,sun.target);sun.target.position.set(0,0,0);
+
+const M=(c,o={})=>new THREE.MeshLambertMaterial(Object.assign({color:c},o));
+const box=(w,h,d,mat,x=0,y=0,z=0,parent=scene)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;};
+
+// 校庭
+box(80,.2,80,M(0xd9c08a),0,-.1,0).castShadow=false;
+box(6,.02,26,M(0xe8d6a8),0,.01,0).castShadow=false;
+// 校舎
+{const c=document.createElement('canvas');c.width=512;c.height=128;const g=c.getContext('2d');g.fillStyle='#efe6d2';g.fillRect(0,0,512,128);
+ g.fillStyle='#7fb0d8';for(let i=0;i<10;i++)for(let j=0;j<2;j++){g.fillRect(14+i*50,14+j*58,38,42);g.fillStyle='#fff8';g.fillRect(14+i*50,14+j*58,38,6);g.fillStyle='#7fb0d8';}
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+ const b=new THREE.Mesh(new THREE.BoxGeometry(40,9,6),[M(0xefe6d2),M(0xefe6d2),M(0xc9503a),M(0xefe6d2),new THREE.MeshLambertMaterial({map:t}),M(0xefe6d2)]);
+ b.position.set(0,4.5,-26);b.castShadow=true;scene.add(b);}
+// 朝礼台
+const stage=box(5,.9,3,M(0xb07a4a),0,.45,-11);
+box(5.4,.12,3.4,M(0xcf9a62),0,.95,-11);
+{const c=document.createElement('canvas');c.width=512;c.height=128;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,512,128);g.fillStyle='#c2331f';g.fillRect(0,0,512,14);g.fillRect(0,114,512,14);
+ g.fillStyle='#222';g.font='bold 62px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('全校朝礼',256,66);
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const p=new THREE.Mesh(new THREE.PlaneGeometry(6,1.5),new THREE.MeshLambertMaterial({map:t}));p.position.set(0,3.6,-12.8);scene.add(p);
+ box(.12,3.2,.12,M(0x555555),-3,1.6,-12.8);box(.12,3.2,.12,M(0x555555),3,1.6,-12.8);}
+// 旗
+box(.1,8,.1,M(0xdddddd),-5.5,4,-10);const flag=box(1.6,1,.05,M(0xffffff),-4.7,7.4,-10);box(.5,.5,.05,M(0xd0202a),-4.7,7.4,-9.97);
+// 木
+for(const [x,z] of [[-12,-18],[13,-17],[-16,-8],[17,-6],[-14,6],[16,10]]){box(.5,2.6,.5,M(0x7a4a2a),x,1.3,z);const l=new THREE.Mesh(new THREE.ConeGeometry(2.4,5,6),M(0x4c9a3c));l.position.set(x,4.6,z);l.castShadow=true;scene.add(l);}
+// 雲
+const clouds=[];for(let i=0;i<7;i++){const g=new THREE.Group();for(let k=0;k<4;k++)box(rnd(3,5),rnd(1,1.6),rnd(2,3),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.9,fog:false}),k*2.2,rnd(-.2,.4),rnd(-.5,.5),g).castShadow=false;
+  g.position.set(rnd(-50,50),rnd(14,22),rnd(-40,-30));scene.add(g);clouds.push(g);}
+
+/* ================= 生徒100人 (InstancedMesh) ================= */
+const N=100,COLS=5,ROWS=20;
+const CLASS_COL=[0x3a78d8,0xe0524a,0x3fae5a,0xf0b22a,0x9a5ad0];
+const parts={
+  legs:new THREE.InstancedMesh(new THREE.BoxGeometry(.4,.5,.2),M(0x2a3350),N),
+  torso:new THREE.InstancedMesh(new THREE.BoxGeometry(.44,.5,.26),M(0xffffff),N),
+  arms:new THREE.InstancedMesh(new THREE.BoxGeometry(.11,.44,.12),M(0xf0e6d0),N*2),
+  head:new THREE.InstancedMesh(new THREE.BoxGeometry(.3,.3,.3),M(0xffd9b0),N),
+  hair:new THREE.InstancedMesh(new THREE.BoxGeometry(.33,.14,.33),M(0xffffff),N),
+};
+for(const k in parts){parts[k].castShadow=true;parts[k].receiveShadow=false;parts[k].instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(parts[k]);}
+const students=[];
+const dummy=new THREE.Object3D(),mat4=new THREE.Matrix4(),root=new THREE.Matrix4(),loc=new THREE.Matrix4(),tmpC=new THREE.Color();
+const hairCols=[0x1a1a1a,0x2a1a10,0x3a2a1a,0x111111,0x4a3020,0xc09040];
+for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+  const i=r*COLS+c,cls=c;
+  const s={i,r,c,cls,x:(c-2)*.95+(Math.random()-.5)*.08,z:8-r*.78+(Math.random()-.5)*.08,fat:rnd(0,8),res:rnd(.6,1.45),lim:rnd(62,100),state:'ok',t:0,ph:rnd(0,6.28),fallDir:rnd(-.4,.4),y:0,gone:false,fallT:0,at:-1};
+  students.push(s);
+  parts.torso.setColorAt(i,tmpC.setHex(CLASS_COL[cls]));parts.hair.setColorAt(i,tmpC.setHex(pick(hairCols)));
+  parts.legs.setColorAt(i,tmpC.setHex(pick([0x2a3350,0x333333,0x4a4a58])));
+}
+for(const k of ['torso','hair','legs'])parts[k].instanceColor.needsUpdate=true;
+// 位置
+function setPart(mesh,idx,lx,ly,lz,rx=0,rz=0,sx=1,sy=1,sz=1){dummy.position.set(lx,ly,lz);dummy.rotation.set(rx,0,rz);dummy.scale.set(sx,sy,sz);dummy.updateMatrix();loc.copy(dummy.matrix);mat4.multiplyMatrices(root,loc);mesh.setMatrixAt(idx,mat4);}
+const easeOutBounce=x=>{const n1=7.5625,d1=2.75;if(x<1/d1)return n1*x*x;if(x<2/d1)return n1*(x-=1.5/d1)*x+.75;if(x<2.5/d1)return n1*(x-=2.25/d1)*x+.9375;return n1*(x-=2.625/d1)*x+.984375;};
+let tAll=0,wind=0,quake=0;
+function poseStudents(dt){
+  for(const s of students){
+    const i=s.i;
+    if(s.gone){root.makeScale(0,0,0);for(const k of ['legs','torso','head','hair'])parts[k].setMatrixAt(i,root);parts.arms.setMatrixAt(i*2,root);parts.arms.setMatrixAt(i*2+1,root);continue;}
+    const f=clamp(s.fat/100,0,1);let tiltX=0,tiltZ=0,crouch=1,headX=0,armUp=0,ry=0,yOff=0;
+    if(s.state==='ok'){
+      const amp=clamp((s.fat-28)/60,0,1);
+      tiltZ=Math.sin(tAll*(1.2+amp*1.5)+s.ph)*.1*amp+Math.sin(tAll*7+s.ph)*.03*wind;
+      tiltX=Math.sin(tAll*.9+s.ph)*.05*amp;headX=amp*.55+(Math.sin(tAll*2+s.ph)>.9?.3*amp:0);
+      if(s.fat>78){crouch=.72;armUp=1;}
+      ry=Math.sin(tAll*.4+s.ph)*.05*(1-amp);
+    }else if(s.state==='falling'||s.state==='out'){
+      s.fallT+=dt;const k=clamp(s.fallT/.8,0,1);const e=s.state==='falling'?easeOutBounce(k):1;
+      tiltX=(Math.PI/2)*e;ry=s.fallDir*e;yOff=.16*e;if(k>=1)s.state='out';
+    }
+    root.compose(new THREE.Vector3(s.x+(quake?Math.sin(tAll*40+s.ph)*.03*quake:0),yOff+(s.abY||0),s.z),
+      new THREE.Quaternion().setFromEuler(new THREE.Euler(tiltX,ry,tiltZ,'YXZ')),new THREE.Vector3(1,crouch,1));
+    // 生徒は-z(校長)向き。モデルは前=-z。
+    setPart(parts.legs,i,0,.25,0);
+    setPart(parts.torso,i,0,.75,0);
+    setPart(parts.head,i,0,1.2+(crouch<1?0:0),-headX*.12,headX,0);
+    setPart(parts.hair,i,0,1.36,-headX*.12+.02,headX,0);
+    // 腕: 通常は下げる、疲れると頭を抱える
+    if(armUp||s.state!=='ok'){setPart(parts.arms,i*2,-.27,1.0,-.05,-2.6,.15);setPart(parts.arms,i*2+1,.27,1.0,-.05,-2.6,-.15);}
+    else{setPart(parts.arms,i*2,-.27,.75,0);setPart(parts.arms,i*2+1,.27,.75,0);}
+  }
+  for(const k in parts)parts[k].instanceMatrix.needsUpdate=true;
+}
+// 顔(目) 簡易: 頭に黒い目 → 背中向きなので省略
+
+/* ================= 校長先生 ================= */
+const P=new THREE.Group();P.position.set(0,1.01,-11);P.scale.setScalar(1.9);scene.add(P);
+const pm={suit:M(0x2a2a3a),skin:M(0xffd9b0),white:M(0xffffff),tie:M(0xc2331f)};
+box(.6,.7,.34,pm.suit,0,1.15,0,P);box(.4,.12,.36,pm.white,0,1.5,0,P);box(.1,.5,.02,pm.tie,0,1.15,.18,P);box(.5,.5,.3,M(0x1c1c28),0,.45,0,P);
+const pHead=box(.4,.4,.4,pm.skin,0,1.75,0,P);
+box(.08,.2,.4,M(0xdddddd),-.24,1.78,0,P);box(.08,.2,.4,M(0xdddddd),.24,1.78,0,P);// 横の髪(はげ)
+box(.1,.1,.02,M(0x111111),-.1,1.8,.21,P);box(.1,.1,.02,M(0x111111),.1,1.8,.21,P);box(.3,.03,.02,M(0x222222),0,1.8,.2,P);// めがね
+const pMouth=box(.14,.04,.02,M(0x8a2a2a),0,1.65,.21,P);
+const pArmL=new THREE.Group(),pArmR=new THREE.Group();pArmL.position.set(-.4,1.4,0);pArmR.position.set(.4,1.4,0);P.add(pArmL,pArmR);
+box(.16,.6,.16,pm.suit,0,-.25,0,pArmL);box(.16,.6,.16,pm.suit,0,-.25,0,pArmR);
+// マイク台
+box(.04,1.1,.04,M(0x444444),0,.55+.55,.7,P);box(.08,.14,.08,M(0x222222),0,1.65,.7,P);
+// 台(演台)
+box(.9,.9,.5,M(0x8a5a30),0,.5,.55,P);
+// アクセサリ
+const acc={
+  ring:new THREE.Mesh(new THREE.TorusGeometry(.5,.14,8,18),M(0xff7a1a)),
+  shades:new THREE.Group(),muffler:new THREE.Group(),umbrella:new THREE.Group(),crown:new THREE.Group(),hat:new THREE.Group(),
+};
+acc.ring.rotation.x=Math.PI/2;acc.ring.position.set(0,1.0,0);acc.ring.scale.set(1.1,1.1,1.1);
+box(.34,.1,.02,M(0x000000),0,1.8,.22,acc.shades);
+box(.5,.14,.4,M(0xe0442f),0,1.52,0,acc.muffler);box(.14,.5,.06,M(0xe0442f),.18,1.3,.2,acc.muffler);
+{const cone=new THREE.Mesh(new THREE.ConeGeometry(.95,.5,10),M(0x3a78d8));cone.position.set(0,2.8,.2);acc.umbrella.add(cone);box(.04,.9,.04,M(0x333333),0,2.3,.2,acc.umbrella);}
+box(.4,.1,.4,M(0xffd23a),0,2.0,0,acc.crown);for(const x of [-.15,0,.15])box(.08,.12,.08,M(0xffd23a),x,2.1,0,acc.crown);
+box(.44,.18,.44,M(0xffffff),0,2.0,0,acc.hat);box(.14,.14,.14,M(0xffffff),0,2.15,0,acc.hat);
+for(const k in acc){P.add(acc[k]);acc[k].visible=false;}
+// 吹き出し演出: 話す時の口パク/腕振り
+let speakT=0,speaking=false;
+function animPrincipal(dt){
+  if(speaking){speakT+=dt;pMouth.scale.y=1+Math.abs(Math.sin(tAll*14))*3;pMouth.scale.x=1+Math.abs(Math.sin(tAll*9))*.5;
+    pArmL.rotation.z=-.5+Math.sin(tAll*3)*.35;pArmR.rotation.z=.5-Math.sin(tAll*2.6)*.35;pArmL.rotation.x=Math.sin(tAll*2)*.3;pArmR.rotation.x=Math.sin(tAll*2.4)*.3;
+    pHead.rotation.z=Math.sin(tAll*2)*.05;}
+  else{pMouth.scale.set(1,1,1);pArmL.rotation.set(0,0,-.15);pArmR.rotation.set(0,0,.15);pHead.rotation.z=0;}
+}
+
+/* ================= 追加キャラ ================= */
+function makeKid(){ // ランドセル
+  const g=new THREE.Group();box(.4,.45,.22,M(0xffffff),0,.7,0,g);box(.36,.45,.18,M(0x2a3350),0,.23,0,g);
+  box(.28,.28,.28,M(0xffd9b0),0,1.08,0,g);box(.3,.1,.3,M(0x111111),0,1.24,0,g);box(.34,.1,.34,M(0xffe03a),0,1.31,0,g);
+  box(.34,.42,.16,M(0xd8202a),0,.78,.2,g);box(.1,.4,.04,M(0xffffff),.12,.8,-.12,g);box(.1,.4,.04,M(0xffffff),-.12,.8,-.12,g);
+  g.scale.setScalar(.85);return g;}
+const kids=[];
+const bear=(()=>{const g=new THREE.Group();const b=M(0x6a4025);box(1.2,.9,.8,b,0,.9,0,g);box(.6,.6,.6,b,.8,1.2,0,g);box(.2,.2,.2,b,.8,1.6,.2,g);box(.2,.2,.2,b,.8,1.6,-.2,g);box(.2,.2,.2,M(0x111111),1.12,1.2,0,g);
+  for(const [x,z] of [[-.4,.3],[-.4,-.3],[.4,.3],[.4,-.3]])box(.25,.6,.25,b,x,.3,z,g);g.visible=false;g.scale.setScalar(1.3);scene.add(g);return g;})();
+const ufo=(()=>{const g=new THREE.Group();const s=new THREE.Mesh(new THREE.SphereGeometry(1.8,16,8),M(0xaab4c4));s.scale.y=.3;g.add(s);const d=new THREE.Mesh(new THREE.SphereGeometry(.8,12,8,0,6.28,0,1.6),new THREE.MeshLambertMaterial({color:0x88ddff,transparent:true,opacity:.7}));d.position.y=.25;g.add(d);
+  const beam=new THREE.Mesh(new THREE.ConeGeometry(1.3,6,16,1,true),new THREE.MeshBasicMaterial({color:0xfff6a0,transparent:true,opacity:.35,side:THREE.DoubleSide,depthWrite:false}));beam.position.y=-3;g.add(beam);g.userData.beam=beam;g.visible=false;scene.add(g);return g;})();
+
+/* ================= パーティクル / 天気 ================= */
+const wx={mode:'none',pts:null};
+{const n=500,geo=new THREE.BufferGeometry(),pos=new Float32Array(n*3);for(let i=0;i<n;i++){pos[i*3]=rnd(-10,10);pos[i*3+1]=rnd(0,14);pos[i*3+2]=rnd(-14,12);}
+ geo.setAttribute('position',new THREE.BufferAttribute(pos,3));wx.pts=new THREE.Points(geo,new THREE.PointsMaterial({color:0xffffff,size:.12,transparent:true,opacity:.9}));wx.pts.visible=false;scene.add(wx.pts);}
+function setWeather(m){wx.mode=m;wx.pts.visible=m!=='none';if(m==='rain'){wx.pts.material.color.set(0x9ac0ff);wx.pts.material.size=.07;}if(m==='snow'){wx.pts.material.color.set(0xffffff);wx.pts.material.size=.16;}}
+function updWeather(dt){if(wx.mode==='none')return;const a=wx.pts.geometry.attributes.position;const sp=wx.mode==='rain'?16:2.2;
+  for(let i=0;i<a.count;i++){let y=a.getY(i)-sp*dt;let x=a.getX(i)+(wx.mode==='rain'?-2:Math.sin(tAll+i)*.4)*dt;if(y<0){y=14;}a.setY(i,y);a.setX(i,x);}a.needsUpdate=true;}
+const bursts=[];const bGeo=new THREE.IcosahedronGeometry(.1,0);
+function burst(x,y,z,color,n=30,sp=5,life=1.2){for(let i=0;i<n;i++){const m=new THREE.Mesh(bGeo,new THREE.MeshBasicMaterial({color,transparent:true}));m.position.set(x,y,z);
+  const a=Math.random()*6.28,b=Math.random()*3.14;const v=rnd(.4,1)*sp;bursts.push({m,vx:Math.sin(b)*Math.cos(a)*v,vy:Math.cos(b)*v,vz:Math.sin(b)*Math.sin(a)*v,life:life*rnd(.6,1),g:7});scene.add(m);}}
+function updBursts(dt){for(let i=bursts.length-1;i>=0;i--){const p=bursts[i];p.life-=dt;p.m.position.x+=p.vx*dt;p.m.position.y+=p.vy*dt;p.m.position.z+=p.vz*dt;p.vy-=p.g*dt;p.m.material.opacity=Math.max(0,p.life);if(p.life<=0){scene.remove(p.m);p.m.material.dispose();bursts.splice(i,1);}}}
+function emo(txt,n=6){const box=$('emo');for(let i=0;i<n;i++){const s=document.createElement('span');s.textContent=txt;s.style.left=(rnd(8,86))+'%';s.style.animationDelay=(i*.12)+'s';box.appendChild(s);setTimeout(()=>s.remove(),2600+i*120);}}
+
+/* ================= ゲーム状態 ================= */
+const MAX_TURNS=6;
+let phase='title',turn=0,heat=0,topic='',faintCount=0,faintTimes=[],segFaintBase=0,speakQ=null,endT=0,timeScale=1;
+let run=null,shake=0,camMode=0,camT=0;
+const flags={ring:false};
+function newRun(){run={fillers:0,saigo:0,events:new Set(),cats:new Set(),maxSeg:0,longest:0,kidTapped:false,topicFaint:0,usedKw:new Set(),unlocked:[]};}
+function passiveRate(){return phase==='speaking'?1.25:phase==='ending'?1.0:.55;}
+
+/* ---- キーワード辞書 ---- */
+// b: 退屈度, f: 楽しさ, h: 暑さ変化, ev: イベント, cat: カテゴリ
+const RULES=[
+ {re:/SDGs|エスディージーズ|持続可能/i,n:'SDGs',b:24,cat:'堅い'},
+ {re:/校則|規則|ルール|きまり|決まり/,n:'校則',b:15,cat:'堅い'},
+ {re:/伝統|歴史|創立|沿革|周年/,n:'伝統',b:17,cat:'歴史'},
+ {re:/令和|昭和|明治|江戸|大正|平成|戦国|縄文/,n:'時代',b:13,cat:'歴史'},
+ {re:/将来|未来|夢|進路|志/,n:'将来',b:11,cat:'人生'},
+ {re:/努力|頑張|継続|忍耐|根性|挑戦/,n:'努力',b:11,cat:'人生'},
+ {re:/感謝|ありがとう|思いやり|優しさ|絆/,n:'感謝',b:9,cat:'人生'},
+ {re:/健康|早寝早起き|睡眠|朝ごはん|手洗い|うがい/,n:'健康',b:9,cat:'生活'},
+ {re:/交通安全|交通ルール|信号|横断歩道|自転車/,n:'交通安全',b:13,cat:'生活'},
+ {re:/命|生命|平和|戦争|人権|道徳|人生|哲学|論語|孔子|ソクラテス/,n:'人生論',b:19,cat:'哲学'},
+ {re:/挨拶|あいさつ/,n:'挨拶',b:9,cat:'生活'},
+ {re:/勉強|学習|成績|受験|テスト|学力/,n:'勉強',b:10,cat:'学校'},
+ {re:/環境|エコ|温暖化|リサイクル|ゴミ|ごみ|SDG/,n:'環境',b:15,cat:'堅い'},
+ {re:/AI|人工知能|デジタル|ICT|タブレット|ネット|SNS|スマホ/,n:'デジタル',b:14,cat:'現代'},
+ {re:/経済|GDP|株|円安|金融|貯金|税/,n:'経済',b:18,cat:'堅い'},
+ {re:/読書|図書|本を/,n:'読書',b:8,cat:'学校'},
+ {re:/宿題なし|宿題がない|宿題ゼロ|宿題をなくす/,n:'宿題なし',f:30,ev:'cheer'},
+ {re:/宿題/,n:'宿題',b:12,ev:'groan',cat:'学校'},
+ {re:/給食|カレー|ラーメン|ケーキ|アイス|おやつ|ハンバーグ|プリン|唐揚げ|からあげ/,n:'給食',f:20,ev:'lunch'},
+ {re:/夏休み|冬休み|春休み|連休|休み|休暇|休校/,n:'休み',f:14,ev:'cheer'},
+ {re:/遊|ゲーム|ドッジボール|サッカー|野球|鬼ごっこ|ポケモン|マイクラ/,n:'遊び',f:12},
+ {re:/自習|早退|下校|放課後|解散|帰っていい|おしまい/,n:'解散',f:16,ev:'cheer'},
+ {re:/ギャグ|ダジャレ|布団が吹っ飛/,n:'ギャグ',b:8,ev:'cold',cat:'ネタ'},
+ {re:/夏|暑|猛暑|真夏|海|プール|スイカ|かき氷|太陽|ひまわり|熱中症/,n:'夏',h:.45,ev:'summer',b:6,cat:'季節'},
+ {re:/冬|寒|雪|スキー|マフラー|こたつ|雪だるま/,n:'冬',h:-.5,ev:'winter',b:6,cat:'季節'},
+ {re:/雨|梅雨|傘|カッパ|雷/,n:'雨',h:-.15,ev:'rain',b:6,cat:'季節'},
+ {re:/台風|強風|暴風|風/,n:'台風',ev:'wind',b:6,cat:'季節'},
+ {re:/地震|揺れ|防災|避難/,n:'地震',ev:'quake',b:12,cat:'生活'},
+ {re:/小学生|ランドセル|一年生|1年生|新入生|入学/,n:'小学生',ev:'kid',b:4},
+ {re:/宇宙|UFO|宇宙人|ロケット|火星/,n:'宇宙',ev:'ufo',f:4},
+ {re:/クマ|熊|くま/,n:'クマ',ev:'bear'},
+ {re:/花火|お祭り|祭り|夏祭り|縁日/,n:'花火',ev:'fireworks',f:12},
+ {re:/歌|校歌|合唱|音楽|ピアノ/,n:'歌',ev:'notes',f:6},
+ {re:/犬|猫|ネコ|イヌ|パンダ|動物|ハムスター/,n:'動物',f:10,ev:'cute'},
+ {re:/昔|若い頃|若いころ|私が子供|思い出|回想|私の/,n:'昔話',b:14,ev:'flash',cat:'校長'},
+ {re:/校長|私は|わたしは|わたくし/,n:'校長自慢',b:9,cat:'校長'},
+];
+const CHIPS=['夏','冬','小学生','SDGs','給食','宇宙','クマ','雨','台風','伝統','昔話','花火','宿題','AI','校歌','最後に','えー','人生','交通安全','環境'];
+const FILLERS=['えー、','ええ、','あー、','つまりですね、','要するにですね、','例えばですね、','ここで大切なのは、','話は変わりますが、'];
+
+/* ---- 実績 ---- */
+const ACH=[
+ ['first','🤕','最初の犠牲者','1人倒した'],['ten','🩹','バタバタ','10人倒した'],['thirty','🏥','保健室満員','30人倒した'],['fifty','🌀','半数撃破','50人倒した'],['all','👑','全員ダウン','100人全員を倒した'],
+ ['zero','😇','優しい校長','1人も倒さず話を終えた'],['dominoes','🀄','ドミノ倒し','3秒以内に10人倒れた'],['quick','⚡','瞬殺','最初の話だけで5人倒した'],['oneturn','💥','一撃必倒','1つの話で20人倒した'],
+ ['summer','🏖️','夏の洗礼','「夏」で浮き輪を装備'],['winter','⛄','冬の訪れ','「冬」でマフラーを装備'],['rain','☔','雨の日の朝礼','「雨」を降らせた'],['wind','🌪️','全天候型','夏・冬・雨・台風を全て経験(累計)'],
+ ['kid','🎒','ようこそ小学生','「小学生」でランドセルの子が紛れ込んだ'],['findkid','🔍','ランドセルを探せ','紛れ込んだ子をタップで見つけた'],['ufo','🛸','第三種接近遭遇','UFOが生徒をさらった'],['bear','🐻','森のくまさん','クマが朝礼に乱入'],
+ ['lunch','🍛','給食は正義','「給食」で生徒を元気にした'],['fire','🎆','フィナーレ','花火を打ち上げた'],['flash','📼','昔の私は','校長の昔話が始まった'],
+ ['eh10','🗣️','えーの達人','1回の朝礼で「えー」を10回言った'],['saigo3','🔁','最後にが3回','「最後に」を3回言ってまだ続けた'],['long','📜','長文校長','1つの話で40字以上話した'],['sdgs','♻️','持続可能な眠気','SDGsを使った'],['scholar','🎓','博識な校長','5種類の堅い話題を使った'],
+ ['events5','🎪','事件の宝庫','1回の朝礼で5種類のイベントを起こした'],['hot','🥵','熱中症注意','暑さを最大にした'],['short','🕊️','有能な校長','「以上です」で早めに終えた'],
+];
+let got=JSON.parse(localStorage.getItem('kocho_ach')||'{}');let lifetime=JSON.parse(localStorage.getItem('kocho_life')||'{"w":[]}');
+const saveAch=()=>{localStorage.setItem('kocho_ach',JSON.stringify(got));localStorage.setItem('kocho_life',JSON.stringify(lifetime));};
+let toastQ=[],toastBusy=false;
+function unlock(id){if(got[id])return;got[id]=Date.now();saveAch();const a=ACH.find(x=>x[0]===id);if(!a)return;run&&run.unlocked.push(a);toastQ.push(a);sfx('ach');nextToast();}
+function nextToast(){if(toastBusy||!toastQ.length)return;toastBusy=true;const a=toastQ.shift();$('tIc').textContent=a[1];$('tName').textContent='実績解除: '+a[2];$('tDesc').textContent=a[3];$('toast').classList.add('on');
+  setTimeout(()=>{$('toast').classList.remove('on');setTimeout(()=>{toastBusy=false;nextToast();},400);},2400);}
+function renderAch(){const n=Object.keys(got).length;$('achN').textContent=`${n}/${ACH.length}`;$('achList').innerHTML=ACH.map(a=>`<div class="a ${got[a[0]]?'':'lock'}"><span class="ic">${got[a[0]]?a[1]:'❓'}</span><div>${got[a[0]]?a[2]:'？？？'}<small>${a[3]}</small></div></div>`).join('');}
+
+/* ================= 話の処理 ================= */
+function analyze(text,first){
+  const info={len:text.length,b:0,f:0,h:0,evs:[],names:[],fill:0,saigo:0,cats:[]};
+  const kanji=(text.match(/[一-龯]/g)||[]).length;const kr=text.length?kanji/text.length:0;
+  info.b=Math.min(34,text.length*.85)*(.55+.9*kr)+Math.min(8,(text.match(/\d/g)||[]).length*2);
+  for(const r of RULES){if(r.re.test(text)){info.names.push(r.n);info.b+=r.b||0;info.f+=r.f||0;info.h+=r.h||0;if(r.ev)info.evs.push(r.ev);if(r.cat)info.cats.push(r.cat);}}
+  info.fill=(text.match(/えー|ええ|あー|えっと|つまり|要するに/g)||[]).length;info.b+=info.fill*3;
+  info.saigo=(text.match(/最後に|さいごに|最後にもう一つ/g)||[]).length;info.b+=info.saigo*5;
+  if(first)info.b+=10; // 校長の挨拶は基本長い
+  return info;
+}
+function principalLine(text,first,info){
+  if(first)return `えー、本日は『${text}』についての話をしたいと思います。${pick(['まず始めに','さて','ええ'])}、${text}というものはですね、実に奥が深いものであります。`;
+  const f=pick(FILLERS);
+  if(info.saigo)return `${f}最後に${text}。……いえ、まだ話は終わりません。`;
+  return `${f}${text}${pick(['ということでありますね。','なのであります。','というわけです。','なんですね。','であります。'])}`;
+}
+function applySegment(text,first){
+  const info=analyze(text,first);
+  // 熱
+  heat=clamp(heat+info.h,0,1);
+  if(heat>=.999)unlock('hot');
+  // 全生徒に疲労
+  const heatM=1+heat*.7;
+  const net=info.b-info.f*.85;
+  for(const s of students){if(s.gone||s.state!=='ok')continue;
+    if(net>0)s.fat+=net*.18*s.res*heatM*rnd(.8,1.2);else s.fat=Math.max(0,s.fat+net*.5);}
+  // イベント
+  for(const ev of [...new Set(info.evs)])fireEvent(ev,text);
+  run.fillers+=info.fill;run.saigo+=info.saigo;run.longest=Math.max(run.longest,text.length);info.cats.forEach(c=>run.cats.add(c));info.names.forEach(n=>run.usedKw.add(n));
+  if(run.fillers>=10)unlock('eh10');
+  if(run.saigo>=3)unlock('saigo3');
+  if(text.length>=40)unlock('long');
+  if(info.names.includes('SDGs'))unlock('sdgs');
+  if(run.cats.size>=5)unlock('scholar');
+  if(run.events.size>=5)unlock('events5');
+  segFaintBase=faintCount;
+  return info;
+}
+function fireEvent(ev,text){
+  run.events.add(ev);
+  const L=lifetime.w;const wset=(k)=>{if(!L.includes(k)){L.push(k);saveAch();}if(['summer','winter','rain','wind'].every(x=>L.includes(x)))unlock('wind');};
+  switch(ev){
+    case 'summer':acc.ring.visible=true;acc.shades.visible=true;acc.muffler.visible=false;setWeather('none');popText('☀️ 校長が浮き輪を装着!');emo('🍉',5);emo('🌻',3);unlock('summer');wset('summer');sfx('event');break;
+    case 'winter':acc.muffler.visible=true;acc.hat.visible=true;acc.ring.visible=false;acc.shades.visible=false;setWeather('snow');popText('❄️ 校庭に雪が…');emo('⛄',5);unlock('winter');wset('winter');sfx('event');break;
+    case 'rain':acc.umbrella.visible=true;setWeather('rain');popText('☔ 雨が降ってきた');emo('☂️',4);unlock('rain');wset('rain');sfx('event');break;
+    case 'wind':wind=1;shake=.4;popText('🌪️ 突風!');emo('💨',5);wset('wind');setTimeout(()=>wind=0,5000);sfx('event');break;
+    case 'quake':quake=1;shake=.6;popText('📳 地震!!');setTimeout(()=>quake=0,2500);sfx('event');break;
+    case 'kid':{const n=kids.length;if(n<4){const g=makeKid();const s=pick(students.filter(q=>!q.gone));g.position.set(s.x+.5,0,s.z);g.rotation.y=Math.PI*0;g.userData.baseX=g.position.x;scene.add(g);kids.push(g);}
+      popText('🎒 ランドセルの子が紛れ込んだ!');emo('🎒',4);unlock('kid');sfx('event');break;}
+    case 'ufo':ufoStart();popText('🛸 UFO襲来!');unlock('ufo');sfx('event');break;
+    case 'bear':bearStart();popText('🐻 クマが出た!!');unlock('bear');sfx('event');break;
+    case 'fireworks':for(let i=0;i<5;i++)setTimeout(()=>burst(rnd(-6,6),rnd(7,11),rnd(-14,-6),pick([0xff5a5a,0xffd23a,0x7ad0ff,0xff7aff,0x8aff8a]),50,6,1.6),i*350);popText('🎆 花火ドーン!');unlock('fire');sfx('event');break;
+    case 'notes':emo('🎵',6);popText('🎵 校歌が聞こえる');break;
+    case 'cute':emo('🐶',4);emo('🐱',3);popText('🐾 かわいい!');break;
+    case 'lunch':emo('🍛',6);emo('😋',3);popText('🍛 みんな目が覚めた!');unlock('lunch');sfx('good');break;
+    case 'cheer':emo('🙌',5);popText('🙌 歓声!');sfx('good');break;
+    case 'groan':emo('😩',5);popText('😩 えぇ〜…');break;
+    case 'cold':emo('🥶',6);popText('🥶 シーン…');for(const s of students)if(!s.gone&&s.state==='ok')s.fat+=5*s.res;sfx('cold');break;
+    case 'flash':emo('📼',5);popText('📼 校長の回想が始まった…');unlock('flash');flashBack=1.2;sfx('event');break;
+  }
+}
+let flashBack=0;
+function popText(t){const p=$('pop');p.textContent=t;p.className='';void p.offsetWidth;p.className='show';}
+
+/* ---- UFO / クマ ---- */
+let ufoS=null,bearS=null;
+function ufoStart(){const t=pick(students.filter(s=>!s.gone&&s.state==='ok'));if(!t)return;ufoS={t:0,target:t};ufo.visible=true;ufo.position.set(t.x,14,t.z-6);}
+function bearStart(){bear.visible=true;bearS={t:0};bear.position.set(8,0,4);for(const s of students)if(!s.gone&&s.state==='ok')s.fat+=8*s.res;shake=.3;}
+function updExtras(dt){
+  if(ufoS){ufoS.t+=dt;const t=ufoS.t,s=ufoS.target;
+    if(t<1.2)ufo.position.set(s.x,lerp(14,6.5,t/1.2),s.z);
+    else if(t<3.2){ufo.position.set(s.x,6.5,s.z);s.abY=lerp(0,5.6,(t-1.2)/2);s.state='ok';s.fat=Math.min(s.fat,60);ufo.userData.beam.visible=true;}
+    else if(t<4.4){s.gone=true;ufo.userData.beam.visible=false;ufo.position.y=lerp(6.5,30,(t-3.2)/1.2);}
+    else{ufo.visible=false;ufoS=null;}}
+  if(bearS){bearS.t+=dt;bear.position.x=lerp(8,-8,bearS.t/6);bear.position.z=4+Math.sin(bearS.t*3)*.6;bear.position.y=Math.abs(Math.sin(bearS.t*6))*.2;bear.rotation.y=Math.PI;if(bearS.t>6){bear.visible=false;bearS=null;}}
+  for(const k of kids){k.position.y=Math.abs(Math.sin(tAll*3+k.position.x))*.06;k.rotation.z=Math.sin(tAll*2)*.05;}
+}
+
+/* ================= 進行 ================= */
+let typeIdx=0,typeStr='',typeT=0,typeDur=3,segText='';
+function startSpeech(line,dur){typeStr=line;typeIdx=0;typeT=0;typeDur=dur;speaking=true;$('said').textContent='';}
+function finishSpeech(){speaking=false;$('said').textContent=typeStr;}
+function onSubmit(){
+  if(phase!=='input')return;initAudio();
+  const text=$('inp').value.trim();if(!text)return;$('inp').value='';
+  const first=turn===0;
+  if(first){topic=text;$('topic').textContent=`校長先生のお話 ─ 『${topic}』についての話`;}
+  const info=applySegment(text,first);
+  const line=principalLine(text,first,info);
+  turn++;phase='speaking';$('bGo').disabled=true;$('inp').disabled=true;
+  segFaintBase=faintCount;
+  startSpeech(line,clamp(2.6+line.length*.09,3.5,8));
+  $('left').textContent=`あと${Math.max(0,MAX_TURNS-turn)}話`;
+  if(first){$('inp').placeholder='キーワードや話を足そう(例: 小学生)';$('hintTxt').textContent='ヒント: 夏・SDGs・給食…などで事件発生!';}
+}
+function afterSpeech(){
+  finishSpeech();
+  const n=faintCount-segFaintBase;run.maxSeg=Math.max(run.maxSeg,n);
+  if(turn===1&&n>=5)unlock('quick');if(n>=20)unlock('oneturn');
+  if(turn>=MAX_TURNS){beginEnding(false);return;}
+  phase='input';$('bGo').disabled=false;$('inp').disabled=false;$('inp').focus&&0;
+}
+function beginEnding(early){
+  phase='ending';endT=0;$('bGo').disabled=true;$('inp').disabled=true;
+  startSpeech(early?'えー、以上です。ご清聴ありがとうございました。':'えー、以上で話を終わります。ご清聴ありがとうございました。……あっ、最後にもう一つ。',early?3:5);
+  window.__early=early;
+}
+function endRun(){
+  phase='result';speaking=false;
+  const n=faintCount;
+  if(n>=1)unlock('first');if(n>=10)unlock('ten');if(n>=30)unlock('thirty');if(n>=50)unlock('fifty');if(n>=100)unlock('all');
+  if(n===0)unlock('zero');if(window.__early&&n<=3)unlock('short');
+  const best=+(localStorage.getItem('kocho_best')||0);if(n>best)localStorage.setItem('kocho_best',n);
+  $('score').textContent=n+'人';
+  const ranks=[[0,'慈悲深き校長'],[1,'新任校長'],[10,'ちょっと長い校長'],[25,'朝礼の名手'],[50,'長話マスター'],[80,'伝説の長話'],[100,'全校制圧の校長']];
+  $('rank').textContent=ranks.filter(r=>n>=r[0]).pop()[1];
+  const left=students.filter(s=>!s.gone&&s.state==='ok').length;
+  $('resSub').innerHTML=`最高記録 ${Math.max(best,n)}人 / 立っている生徒 ${left}人<br>キーワード: ${[...run.usedKw].join('・')||'なし'}${run.unlocked.length?`<br>🏆 新しい実績: ${run.unlocked.map(a=>a[1]+a[2]).join(' ')}`:''}`;
+  $('result').classList.remove('hide');$('hud').classList.add('hide');$('best').textContent=`最高記録: ${Math.max(best,n)}人`;
+}
+function resetWorld(){
+  for(const s of students){s.fat=rnd(0,8);s.state='ok';s.fallT=0;s.gone=false;s.abY=0;s.t=0;s.res=rnd(.6,1.45);s.lim=rnd(62,100);}
+  for(const k of kids)scene.remove(k);kids.length=0;
+  for(const k in acc)acc[k].visible=false;setWeather('none');heat=0;faintCount=0;faintTimes=[];wind=0;quake=0;ufo.visible=false;bear.visible=false;ufoS=bearS=null;turn=0;
+}
+function startGame(){
+  initAudio();resetWorld();newRun();phase='input';
+  $('title').classList.add('hide');$('result').classList.add('hide');$('achP').classList.add('hide');$('hud').classList.remove('hide');
+  $('topic').textContent='全校朝礼 ─ 校長先生のお話';$('said').textContent='えー、本日は何についての話をしましょうか。(テーマを入力してね)';
+  $('inp').value='';$('inp').disabled=false;$('bGo').disabled=false;$('inp').placeholder='お話のテーマを入力 (例: 夏休み)';$('left').textContent=`あと${MAX_TURNS}話`;
+  $('hintTxt').textContent='まずテーマを決めよう!';speaking=false;renderChips();
+}
+function renderChips(){const c=$('chips');c.innerHTML='';for(const w of CHIPS){const b=document.createElement('button');b.textContent=w;b.onclick=()=>{$('inp').value=($('inp').value+w).slice(0,60);};c.appendChild(b);}}
+
+/* ================= メインループ ================= */
+function faintStudent(s){
+  s.state='falling';s.fallT=0;faintCount++;faintTimes.push(tAll);
+  burst(s.x,1.4,s.z,0xffee66,6,2.5,.8);sfx('thud');
+  // 連鎖: 近くの生徒にショック
+  for(const q of students){if(q===s||q.gone||q.state!=='ok')continue;const d=Math.hypot(q.x-s.x,q.z-s.z);if(d<1.3)q.fat+=6*q.res;}
+  const recent=faintTimes.filter(t=>tAll-t<=3).length;if(recent>=10)unlock('dominoes');
+  if(faintCount===1)popText('🤕 最初の1人が倒れた!');
+}
+function step(dt){
+  tAll+=dt;
+  const dts=dt*timeScale;
+  // 進行
+  if(phase==='speaking'||phase==='ending'){
+    typeT+=dt;const k=clamp(typeT/typeDur,0,1);const idx=Math.floor(k*typeStr.length);if(idx>typeIdx){if(idx%2===0)blip();typeIdx=idx;$('said').textContent=typeStr.slice(0,idx);}
+    if(k>=1){if(phase==='speaking')afterSpeech();else{finishSpeech();phase='ending2';endT=0;}}
+  }
+  if(phase==='ending2'){endT+=dt;const early=window.__early;if(endT>(early?2.5:7))endRun();else if(!early&&endT>1.5&&!window.__more){window.__more=true;$('said').textContent='……ということで、話を終わります。(まだ倒れていく…)';speaking=true;setTimeout(()=>speaking=false,1500);}}
+  // 疲労
+  if(phase==='speaking'||phase==='ending'||phase==='ending2'||phase==='input'){
+    const base=(phase==='input'?.3:phase==='ending2'?.7:.85)*(1+heat*.9);
+    for(const s of students){if(s.gone||s.state!=='ok')continue;
+      s.fat+=dt*base*s.res*(1+Math.max(0,faintCount)*.004);
+      if(s.fat>=s.lim)faintStudent(s);}
+  }
+  // 暑さ自然減衰
+  heat=Math.max(0,heat-dt*.006);
+  // HUD
+  const alive=students.filter(s=>!s.gone&&s.state==='ok');const avg=alive.length?alive.reduce((a,s)=>a+s.fat,0)/alive.length:100;
+  $('nFaint').textContent=faintCount;$('bFat').firstElementChild.style.width=clamp(avg,0,100)+'%';$('bHeat').firstElementChild.style.width=(heat*100)+'%';
+  // 見た目
+  scene.background.copy(SKY_A).lerp(SKY_HOT,heat*.7);if(wx.mode==='snow')scene.background.copy(SKY_COLD);if(wx.mode==='rain')scene.background.copy(SKY_DARK);
+  scene.fog.color.copy(scene.background);
+  hemi.intensity=wx.mode==='rain'?.8:1.15;sun.intensity=wx.mode==='rain'?1.0:2.2+heat*.6;
+  for(const c of clouds){c.position.x+=dt*.4;if(c.position.x>60)c.position.x=-60;}
+  flag.rotation.y=Math.sin(tAll*3)*.2;
+  if(flashBack>0){flashBack-=dt;}
+  poseStudents(dt);animPrincipal(dt);updExtras(dt);updWeather(dt);updBursts(dt);
+  // カメラ
+  camT=lerp(camT,camMode,Math.min(1,dt*3));
+  const cx=0,cy=lerp(5.6,3.8,camT),cz=lerp(15.5,-1.5,camT);
+  shake=Math.max(0,shake-dt*.8);
+  camera.position.set(cx+Math.sin(tAll*.2)*.5+(Math.random()-.5)*shake*.4,cy+(Math.random()-.5)*shake*.4,cz);
+  camera.lookAt(0,lerp(1.6,2.1,camT),-6-camT*4);
+  renderer.render(scene,camera);
+}
+let last=performance.now();
+function loop(tm){requestAnimationFrame(loop);const d=Math.min(.1,(tm-last)/1000);last=tm;if(!window.NOLOOP)step(d);}
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w/h<.8?72:58;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+$('loading').classList.add('hide');requestAnimationFrame(loop);
+
+/* ================= UI ================= */
+$('bStart').onclick=startGame;$('bAgain').onclick=startGame;
+$('bGo').onclick=onSubmit;$('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)onSubmit();});
+$('bView').onclick=()=>camMode=camMode?0:1;
+$('bEnd').onclick=()=>{if(phase==='input'&&turn>0){beginEnding(true);}};
+const showAch=()=>{renderAch();$('achP').classList.remove('hide');};
+$('bAch').onclick=showAch;$('bAch2').onclick=showAch;$('bAch3').onclick=showAch;$('bAchBack').onclick=()=>$('achP').classList.add('hide');
+$('bShare').onclick=()=>{const t=`校長先生の『${topic}』についての話で、全校生徒${faintCount}人が倒れた!`;const u=location.href.split('?')[0];
+  if(navigator.share)navigator.share({title:'校長先生のお話が長すぎる',text:t,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+u).then(()=>{$('bShare').textContent='コピーしました'});};
+$('best').textContent=localStorage.getItem('kocho_best')?`最高記録: ${localStorage.getItem('kocho_best')}人`:'';
+// 子どもをタップで発見
+canvas.addEventListener('pointerdown',e=>{initAudio();if(!kids.length||run&&run.kidTapped)return;const ray=new THREE.Raycaster(),nd=new THREE.Vector2(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);ray.setFromCamera(nd,camera);
+  const hit=ray.intersectObjects(kids,true);if(hit.length){run.kidTapped=true;unlock('findkid');popText('🎒 みつけた!');burst(hit[0].point.x,hit[0].point.y,hit[0].point.z,0xffd23a,24,4);}});
+
+/* ================= サウンド ================= */
+let AC=null;
+function initAudio(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();}
+function tone(f0,f1,dur,type='sine',vol=.15,delay=0){if(!AC)return;const t=AC.currentTime+delay,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+dur);}
+function blip(){tone(rnd(110,150),rnd(95,130),.07,'sawtooth',.05);}
+function sfx(k){if(!AC)return;
+  if(k==='thud'){tone(120,40,.2,'sine',.25);}
+  else if(k==='ach'){tone(660,660,.12,'square',.1);tone(880,880,.12,'square',.1,.1);tone(1320,1320,.3,'square',.1,.2);}
+  else if(k==='event'){tone(400,800,.25,'triangle',.18);tone(600,1200,.2,'triangle',.12,.1);}
+  else if(k==='good'){tone(523,523,.12,'triangle',.15);tone(784,784,.2,'triangle',.15,.1);}
+  else if(k==='cold'){tone(300,100,.5,'sine',.12);}
+}
+// デバッグ
+window.G={scene,camera,renderer,step,get phase(){return phase},students,get faint(){return faintCount},get run(){return run},tick(n=1,dt=1/30){for(let i=0;i<n;i++)step(dt);},submit(t){$('inp').value=t;onSubmit();},get heat(){return heat},unlockedAll(){return got}};
+</script>
+</body>
+</html>
