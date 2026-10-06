@@ -63,6 +63,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 #score{font-size:60px;color:var(--red);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;line-height:1.1}
 .tags span{display:inline-block;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:1px 9px;margin:2px;font-size:12px}
 </style>
+<style>html,body,button,canvas{touch-action:manipulation}</style>
+<script>
+(function(){var last=0,ok=function(t){return !/^(INPUT|TEXTAREA)$/.test(t.tagName);};
+document.addEventListener('touchend',function(e){var n=Date.now();if(n-last<350&&ok(e.target))e.preventDefault();last=n;},{passive:false});
+['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault();});});
+document.addEventListener('dblclick',function(e){if(ok(e.target))e.preventDefault();});
+document.addEventListener('touchmove',function(e){if(e.touches.length>1)e.preventDefault();},{passive:false});})();
+</script>
 </head>
 <body>
 <canvas id="c"></canvas>
