@@ -87,6 +87,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <h1 class="logo"><small>全校集会シミュレーター</small>校長先生の<br>お話が長すぎる</h1>
   <div class="small">校長先生に話させる<b>キーワード</b>を1つ入力。<br>校庭 → 校長 → 全校生徒100人…<br>そしてキーワードが告げられた瞬間、<br>生徒たちはバタバタと倒れていく。<br>言葉によっては<b>コスプレ</b>や<b>事件</b>が発生!?<br>運がよければ<b>レア演出</b>も…</div>
   <button class="btn" id="bStart">朝礼をはじめる</button>
+  <button class="btn sub" id="bRules">📖 ルール説明</button>
   <button class="btn sub" id="bAch2">🏆 実績</button>
   <div class="small" id="best"></div>
 </div>
@@ -95,6 +96,20 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div id="rank" style="font-size:22px"></div><div class="small tags" id="resTags"></div><div class="small" id="resSub"></div>
   <button class="btn" id="bShare">結果をシェア</button>
   <button class="btn" id="bAgain">別の言葉でもう一度</button><button class="btn sub" id="bAch3">🏆 実績</button>
+</div>
+<div id="rulesP" class="panel hide" style="justify-content:flex-start;background:linear-gradient(#a9d8fff5,#fff5d0f8)">
+  <h2 style="margin:8px 0 0">📖 ルール説明</h2>
+  <div class="list" style="font-size:14px;line-height:1.7">
+    <div class="a" style="display:block"><b>① キーワードを入力</b><br>校長先生に話させたい言葉を1つ入力して「話させる」を押します。(例: 夏、給食、SDGs、宇宙…)</div>
+    <div class="a" style="display:block"><b>② 朝礼がはじまる</b><br>校庭 → 校長先生 → 全校生徒100人 → ズームインで、校長先生がキーワードを発表します。画面タップでスキップできます。</div>
+    <div class="a" style="display:block"><b>③ 生徒がバタバタ倒れる</b><br>キーワードの発表後、生徒がランダムに倒れ、「のこり ○人」が減っていきます。<b>倒れた人数がスコア</b>です。</div>
+    <div class="a" style="display:block"><b>眠くなる言葉・元気になる言葉</b><br>「SDGs」「校則」「経済」など堅い言葉、漢字だらけの言葉ほど眠くなって倒れます。「給食」「休み」「遊び」など楽しい言葉は、生徒が元気になって倒れにくくなります。</div>
+    <div class="a" style="display:block"><b>コスプレ・事件</b><br>特定の言葉で校長先生がコスプレしたり、事件が起きたりします。(全125種類)</div>
+    <div class="a" style="display:block"><b>レア演出</b><br>運がよければ、黄金の校長・隕石・天使降臨・ドラゴン襲来などのレア演出が発生します。(全21種類 / ★2〜★4)<br>倒れる人数が増えるものも、減るものもあります。</div>
+    <div class="a" style="display:block"><b>実績 🏆</b><br>人数・コスプレ・レア演出・キーワードごとに実績が用意されています。いろいろな言葉を試して、全部集めよう!</div>
+    <div class="a" style="display:block"><b>ヒント</b><br>入力せずに5秒待つと、ヒントが表示されます。</div>
+  </div>
+  <button class="btn" id="bRulesBack">わかった!</button>
 </div>
 <div id="achP" class="panel hide" style="justify-content:flex-start"><h2 style="margin:8px 0">🏆 実績 <span id="achN"></span></h2><div class="list" id="achList"></div><button class="btn sub" id="bAchBack">もどる</button></div>
 <div id="loading" class="panel" style="z-index:9;background:#a9d8ff"><h1 class="logo" style="font-size:24px">読み込み中…</h1></div>
@@ -800,7 +815,8 @@ addEventListener('resize',resize);resize();
 $('loading').classList.add('hide');requestAnimationFrame(loop);
 
 /* ================= UI ================= */
-$('bStart').onclick=()=>{initAudio();toInput();};
+$('bStart').onclick=()=>{initAudio();toInput();try{if(!localStorage.getItem('kocho_seen')){localStorage.setItem('kocho_seen','1');$('rulesP').classList.remove('hide');}}catch(e){}};
+$('bRules').onclick=()=>$('rulesP').classList.remove('hide');$('bRulesBack').onclick=()=>$('rulesP').classList.add('hide');
 $('bAgain').onclick=toInput;
 $('bGo').onclick=submit;
 $('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)submit();});
