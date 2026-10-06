@@ -340,6 +340,175 @@ const COS=[
  {id:'quake',icon:'📳',re:/地震|揺れ|震度|津波|火山|噴火|南海トラフ|余震/,lbl:'地震',b:10,f:0,line:'えー、落ち着いて行動してください。',cap:'地震だ!!',fx:'quake'},
  {id:'student',icon:'🎓',re:/卒業|先輩|制服|学ラン|セーラー服|修了|学生服|ブレザー/,lbl:'学ラン校長',b:6,f:0,line:'えー、校長もかつては学ランを着ておりました。',cap:'学ラン校長!',fx:'petals'},
 ];
+/* ===== 追加コスプレ/イベント(パラメータ式) ===== */
+const HAT={
+ cap:(g,c)=>{bx(g,.46,.14,.46,c,0,2.0,0);bx(g,.4,.04,.3,c,0,1.96,.3);},
+ top:(g,c)=>{bx(g,.34,.5,.34,c,0,2.2,0);bx(g,.6,.04,.6,c,0,1.97,0);},
+ cone:(g,c)=>{cone(g,.3,.7,c,0,2.3,0);},
+ band:(g,c)=>{bx(g,.46,.1,.46,c,0,1.9,0);bx(g,.1,.1,.06,c,.25,1.85,-.15);},
+ helm:(g,c)=>{bx(g,.5,.3,.5,c,0,1.98,0);},
+ beret:(g,c)=>{cyl(g,.3,.3,.1,c,.05,2.0,0);sph(g,.05,c,.05,2.08,0);},
+ horns:(g,c)=>{cone(g,.06,.28,c,-.14,2.12,0,5);cone(g,.06,.28,c,.14,2.12,0,5);},
+ ears:(g,c)=>{bx(g,.1,.42,.06,c,-.12,2.2,0);bx(g,.1,.42,.06,c,.12,2.2,0);},
+ earsRound:(g,c)=>{sph(g,.11,c,-.2,2.0,0);sph(g,.11,c,.2,2.0,0);},
+ crown:(g,c)=>{bx(g,.4,.1,.4,c,0,2.0,0);for(const x of [-.15,0,.15])bx(g,.08,.14,.08,c,x,2.11,0);},
+ towel:(g,c)=>{bx(g,.5,.12,.5,c,0,1.92,0);bx(g,.3,.1,.3,c,0,2.02,0);},
+ visor:(g,c)=>{bx(g,.46,.06,.46,c,0,1.98,0);bx(g,.4,.03,.34,c,0,1.96,.3);},
+ straw:(g,c)=>{cyl(g,.45,.45,.04,c,0,1.98,0);cyl(g,.2,.2,.16,c,0,2.06,0);},
+ square:(g,c)=>{bx(g,.62,.04,.62,c,0,2.02,0);bx(g,.3,.08,.3,c,0,1.96,0);bx(g,.04,.3,.04,0xffd23a,.3,1.88,.3);},
+ chef:(g,c)=>{cyl(g,.26,.2,.5,c,0,2.15,0);bx(g,.5,.1,.5,c,0,1.95,0);},
+ eboshi:(g,c)=>{bx(g,.3,.4,.3,c,0,2.1,0);},
+ mohawk:(g,c)=>{bx(g,.08,.34,.4,c,0,2.05,0);},
+ beak:(g,c)=>{bx(g,.16,.1,.16,c,0,1.72,.3);bx(g,.4,.08,.4,c,0,1.95,0);},
+ mane:(g,c)=>{bx(g,.7,.7,.3,c,0,1.78,-.18);bx(g,.5,.1,.5,c,0,1.98,0);},
+ dome:(g,c)=>{sph(g,.3,c,0,1.95,0,1,.9,1);},
+ antenna:(g,c)=>{bx(g,.04,.3,.04,c,-.1,2.1,0);bx(g,.04,.3,.04,c,.1,2.1,0);sph(g,.06,c,-.1,2.28,0);sph(g,.06,c,.1,2.28,0);},
+ bow:(g,c)=>{bx(g,.18,.14,.06,c,-.14,2.05,.1);bx(g,.18,.14,.06,c,.14,2.05,.1);sph(g,.07,c,0,2.05,.1);},
+ bonnet:(g,c)=>{sph(g,.28,c,0,1.95,-.02,1,.8,1);},
+};
+const FACE={
+ glasses:g=>{bx(g,.12,.1,.02,0x111111,-.1,1.8,.22);bx(g,.12,.1,.02,0x111111,.1,1.8,.22);bx(g,.1,.02,.02,0x111111,0,1.8,.22);},
+ shades:g=>{bx(g,.34,.1,.02,0x000000,0,1.8,.22);},
+ mask:g=>{bx(g,.32,.16,.03,0xffffff,0,1.68,.22);},
+ goggles:g=>{bx(g,.36,.12,.05,0x33aaff,0,1.8,.22);bx(g,.42,.04,.42,0x222222,0,1.8,0);},
+ mustache:g=>{bx(g,.22,.05,.03,0x222222,0,1.7,.22);},
+ nose:g=>{sph(g,.08,0xff2a2a,0,1.72,.24);},
+ monocle:g=>{const t=new THREE.Mesh(new THREE.TorusGeometry(.07,.015,6,12),M(0xffd23a));t.position.set(.1,1.8,.22);g.add(t);},
+ patch:g=>{bx(g,.12,.12,.03,0x111111,.1,1.8,.22);bx(g,.12,.12,.03,0x111111,-.1,1.8,.22);},
+ mask2:g=>{bx(g,.4,.1,.04,0xd8202a,0,1.8,.22);},
+};
+const ITEM={
+ stick:(g,c)=>{bx(g,.05,1.2,.05,c,.58,1.0,.3,.3,0,0);},
+ sword:(g,c)=>{bx(g,.07,1.1,.04,c,.6,1.1,.3,.2,0,0);bx(g,.2,.05,.06,0xffd23a,.6,.6,.3);},
+ racket:(g,c)=>{bx(g,.05,.5,.05,0x7a4a2a,.58,.85,.35);const t=new THREE.Mesh(new THREE.TorusGeometry(.17,.03,6,14),M(c));t.position.set(.58,1.25,.35);g.add(t);},
+ ball:(g,c)=>{sph(g,.2,c,.58,.95,.4);},
+ gloves:(g,c)=>{sph(g,.15,c,.52,.85,.32);sph(g,.15,c,-.52,.85,.32);},
+ flag:(g,c)=>{bx(g,.04,1.2,.04,0x7a4a2a,.6,1.1,.3);bx(g,.5,.3,.03,c,.85,1.55,.3);},
+ mega:(g,c)=>{cone(g,.18,.4,c,.55,1.1,.45,8).rotation.x=Math.PI/2;},
+ guitar:(g,c)=>{bx(g,.34,.5,.07,c,.0,.85,.32,0,0,.4);bx(g,.06,.6,.05,0x5a3a1a,.25,1.25,.32,0,0,.4);},
+ lens:(g,c)=>{bx(g,.04,.4,.04,0x5a3a1a,.55,.95,.35);const t=new THREE.Mesh(new THREE.TorusGeometry(.15,.025,6,14),M(c));t.position.set(.55,1.28,.35);g.add(t);},
+ wand:(g,c)=>{bx(g,.04,.6,.04,0xffffff,.55,1.0,.35,.4,0,0);sph(g,.09,c,.55,1.35,.45);},
+ hammer:(g,c)=>{bx(g,.06,.9,.06,0x7a4a2a,.58,.95,.3);bx(g,.3,.2,.2,c,.58,1.45,.3);},
+ fan:(g,c)=>{bx(g,.4,.3,.02,c,.55,1.1,.4);},
+ book:(g,c)=>{bx(g,.3,.04,.4,c,.5,.95,.4);},
+ laptop:(g,c)=>{bx(g,.5,.04,.35,c,0,.9,.55);bx(g,.5,.34,.03,c,0,1.1,.4,-.3,0,0);},
+ camera:(g,c)=>{bx(g,.3,.2,.2,c,.5,1.1,.4);cyl(g,.06,.06,.1,0x888888,.5,1.1,.55).rotation.x=Math.PI/2;},
+ briefcase:(g,c)=>{bx(g,.4,.3,.12,c,.55,.7,.2);},
+ tray:(g,c)=>{bx(g,.5,.04,.5,c,.1,1.0,.5);cyl(g,.1,.1,.2,0xffffff,.1,1.12,.5);},
+ box:(g,c)=>{bx(g,.4,.4,.4,c,.0,1.0,.5);},
+ lantern:(g,c)=>{sph(g,.14,c,.55,.9,.35);},
+ palette:(g,c)=>{cyl(g,.22,.22,.03,c,.5,1.0,.4);sph(g,.04,0xff3a3a,.45,1.03,.4);sph(g,.04,0x3a8aff,.55,1.03,.35);},
+ plate:(g,c)=>{cyl(g,.2,.2,.04,0xffffff,.5,1.0,.45);sph(g,.12,c,.5,1.1,.45);},
+ cup:(g,c)=>{cyl(g,.08,.06,.14,c,.5,1.0,.4);},
+};
+const BACK={
+ pack:(g,c)=>{bx(g,.5,.6,.2,c,0,1.2,-.3);},
+ cape:(g,c)=>{bx(g,.8,1.2,.08,c,0,1.05,-.24);},
+ wings:(g,c)=>{for(const s of [-1,1])for(let i=0;i<3;i++)bx(g,.5,.1,.06,c,s*(.45+i*.25),1.4-i*.1,-.3,0,0,s*(.3+i*.1));},
+ tail:(g,c)=>{bx(g,.1,.5,.1,c,0,.55,-.3,.5,0,0);sph(g,.12,c,0,.35,-.5);},
+ tank:(g,c)=>{cyl(g,.1,.1,.6,c,-.12,1.2,-.3);cyl(g,.1,.1,.6,c,.12,1.2,-.3);},
+ board:(g,c)=>{bx(g,.3,1.4,.06,c,0,1.0,-.35);},
+};
+function buildSpec(g,s){
+  if(s.b!==undefined)bx(g,.67,.75,.41,s.b,0,1.12,0);
+  if(s.a!==undefined)bx(g,.4,.55,.04,s.a,0,.95,.22);
+  if(s.h&&HAT[s.h[0]])HAT[s.h[0]](g,s.h[1]);
+  if(s.f&&FACE[s.f])FACE[s.f](g);
+  if(s.i&&ITEM[s.i[0]])ITEM[s.i[0]](g,s.i[1]);
+  if(s.k&&BACK[s.k[0]])BACK[s.k[0]](g,s.k[1]);
+}
+const COS2=[];
+const R=(id,icon,lbl,re,b,f,line,cap,fx,spec)=>COS2.push({id,icon,lbl,re,b,f,line,cap,fx,spec});
+R('sushi','🍣','板前校長',/寿司|すし|握り|回転寿司|大トロ|いくら|ウニの軍艦/,0,12,'えー、へいらっしゃい。本日のネタは校長であります。','板前校長 いらっしゃい!','e:🍣,🍙,🐟;h',{h:['band',0xffffff],b:0xffffff,a:0x2a4a8a,f:'mustache',i:['plate',0xd8202a]});
+R('ramen','🍜','ラーメン店主',/ラーメン|らーめん|チャーシュー|替え玉|つけ麺|豚骨|味噌ラーメン/,0,13,'えー、うちのスープは、校長が三日三晩煮込みました。','ラーメン校長 開店!','e:🍜,🥢,♨️;h',{h:['towel',0xffffff],b:0x111111,a:0xffffff,i:['plate',0xffcf5a]});
+R('pizza','🍕','ピザ職人',/ピザ|チーズ|ナポリ|マルゲリータ|イタリア|パスタ|スパゲッティ/,0,12,'えー、本場ナポリの窯で焼いたピザであります。','ピザ職人 登場!','e:🍕,🧀,🍝;h',{h:['chef',0xffffff],b:0xdd3333,a:0xffffff,f:'mustache',i:['plate',0xf0a020]});
+R('cake','🎂','パティシエ校長',/ケーキ|パティシエ|お誕生日|誕生日|バースデー|生クリーム|いちご|スイーツ|マカロン/,0,14,'えー、本日はお誕生日会であります。','パティシエ校長!','e:🎂,🍰,🧁;h',{h:['chef',0xffc8e0],b:0xffffff,a:0xff9ac0,i:['plate',0xffeef0]});
+R('coffee','☕','バリスタ校長',/コーヒー|カフェ|珈琲|紅茶|ラテ|喫茶|バリスタ|スタバ/,0,5,'えー、朝礼の前に、一杯いかがですか。','バリスタ校長!','e:☕,🥐;h',{b:0x5a3a22,a:0x3a2a1a,i:['cup',0xffffff],f:'mustache'});
+R('tea','🍵','茶人校長',/茶道|お茶|抹茶|茶室|和菓子|お点前|煎茶|日本茶/,3,2,'えー、一服、差し上げましょう。','茶道校長 参上!','e:🍵,🍡;w:sakura',{b:0x3a7a4a,i:['cup',0x2a5a2a],h:['band',0x2a5a2a]});
+R('bento','🍱','お弁当校長',/お弁当|弁当|おにぎり|のり弁|駅弁|遠足のお弁当/,0,10,'えー、お弁当の時間であります。','お弁当校長!','e:🍱,🍙,🥚;h',{h:['towel',0xffffff],b:0xffffff,i:['plate',0xcc5522]});
+R('icecream','🍦','アイス屋校長',/ソフトクリーム|かき氷屋|シャーベット|アイスクリーム|バニラ|氷菓/,0,13,'えー、冷たいものを、ご用意しました。','アイス屋校長!','e:🍦,🍧,🍨;h',{h:['cap',0xff8ac0],b:0xff8ac0,a:0xffffff,i:['plate',0xfff0f0]});
+R('takoyaki','🐙','屋台の校長',/たこ焼き|焼きそば|お好み焼き|屋台飯|りんご飴|綿あめ|フランクフルト|焼き鳥/,0,12,'えー、らっしゃい!たこ焼き、焼けてるよ!','屋台校長 開店!','e:🐙,🍢,🥢;h',{h:['band',0xe0442f],b:0xe0442f,a:0xffffff,i:['plate',0xc8863a]});
+R('suika','🍉','スイカ割り校長',/スイカ割り|目隠し|ビーチバレー|棒でたたく/,0,10,'えー、スイカ割りは、右、右、そこです。','スイカ割り校長!','e:🍉,🏖️;h',{f:'patch',i:['stick',0x7a4a2a],h:['straw',0xe8c860],b:0xff7a1a});
+R('camp','⛺','キャンプ校長',/キャンプ場|キャンプファイヤー|焚き火|テント|バーベキュー|BBQ|飯ごう|アウトドア|ソロキャン/i,0,10,'えー、本日は、焚き火を囲みましょう。','キャンプ校長!','e:⛺,🔥,🌲;h',{h:['cap',0x4a7a3a],b:0x4a7a3a,k:['pack',0xc8963a],i:['lantern',0xffaa33]});
+R('mountain','⛰️','登山校長',/登山|富士山|山登り|エベレスト|ハイキング|頂上|アルプス|山頂|トレッキング/,3,4,'えー、そこに山があるから、登るのです。','登山校長 出発!','e:⛰️,🥾,🗻;w:snow',{h:['helm',0xe0442f],b:0x2a6ab8,k:['pack',0xe0442f],i:['stick',0x7a4a2a]});
+R('ski','⛷️','スキーヤー校長',/ゲレンデ|スノーボード|スノボ|リフト|パウダー|滑走|ウィンタースポーツ/,0,8,'えー、本日はゲレンデの状況をお伝えします。','スキー校長 滑走!','e:⛷️,🏂,❄️;w:snow',{h:['helm',0xffffff],f:'goggles',b:0xe0442f,i:['stick',0x333333]});
+R('surf','🏄','サーファー校長',/サーフィン|波乗り|ビッグウェーブ|サーフボード|ロングボード|サーファー/,0,9,'えー、いい波が来ております。','サーファー校長!','e:🏄,🌊,🤙;h',{b:0x1a8ab8,f:'shades',k:['board',0xffd23a]});
+R('swim','🏊','水泳校長',/水泳|クロール|平泳ぎ|バタフライ|背泳ぎ|飛び込み|スイミング|プール授業/,2,4,'えー、準備体操をしてから、入水してください。','水泳校長!','e:🏊,💦,🥽;h',{h:['cap',0x3a78d8],f:'goggles',b:0x3a78d8});
+R('tennis','🎾','テニス校長',/テニス|ラケット|ウィンブルドン|サーブ|ラリー|錦織|大坂なおみ|スマッシュ/,0,8,'えー、サービスエース、決めます。','テニス校長!','e:🎾,🏆;h',{h:['visor',0xffffff],b:0xffffff,i:['racket',0xd8202a]});
+R('basketball','🏀','バスケ校長',/バスケ|NBA|ダンク|スリーポイント|スラムダンク|ドリブル/,0,9,'えー、ダンクを決めます。','バスケ校長!','e:🏀,🔥;h',{b:0xe0442f,h:['band',0xffffff],i:['ball',0xe8761a]});
+R('volleyball','🏐','バレー校長',/バレー|アタック|ハイキュー|スパイク|レシーブ|トス/,0,8,'えー、トス、アタック!','バレー校長!','e:🏐,💪;h',{b:0x3a78d8,h:['band',0xffffff],i:['ball',0xffffff]});
+R('rugby','🏉','ラグビー校長',/ラグビー|トライ|スクラム|ノーサイド|ワンチーム/,0,7,'えー、ノーサイド。','ラグビー校長!','e:🏉,💥;h;k',{b:0x1a5a3a,h:['band',0xffffff],i:['ball',0x8a4a2a]});
+R('golf','⛳','ゴルフ校長',/ゴルフ|ホールインワン|パター|ティーショット|バーディ|ゴルファー/,2,4,'えー、ナイスショット。','ゴルフ校長!','e:⛳,🏌️;h',{h:['cap',0xffffff],b:0x3a9a5a,i:['stick',0xc8c8c8]});
+R('boxing','🥊','ボクサー校長',/ボクシング|ボクサー|ノックアウト|ゴング|チャンピオン|パンチ|ファイト|ロッキー/,0,6,'えー、ファイト。','ボクサー校長!','e:🥊,💥;k',{b:0xd8202a,h:['band',0xd8202a],i:['gloves',0xd8202a]});
+R('judo','🥋','黒帯校長',/柔道|空手|合気道|黒帯|道着|武術|カンフー|ブルース・リー|格闘技/,4,4,'えー、押忍。','黒帯校長!','e:🥋,💥;k',{b:0xffffff,a:0x111111});
+R('marathon','🏃','マラソン校長',/マラソン|駅伝|ランニング|ジョギング|フルマラソン|箱根駅伝|ゴールテープ/,0,6,'えー、42.195キロ、走り抜きます。','マラソン校長!','e:🏃,💨,🥇;h',{h:['band',0xe0442f],b:0xffffff,i:['flag',0xe0442f]});
+R('cheer','📣','応援団長校長',/応援団|エール|フレーフレー|声援|応援歌/,0,8,'えー、フレー、フレー、皆さん!','応援団長 校長!','e:📣,🎌,💪;h;k',{h:['band',0xffffff],b:0x111111,i:['mega',0xdddddd]});
+R('cycle','🚴','サイクリング校長',/サイクリング|ロードバイク|ツール・ド・フランス|ママチャリ|自転車レース|ペダル/,0,6,'えー、風になります。','サイクリング校長!','e:🚴,💨;h',{h:['helm',0xffd23a],f:'shades',b:0x3a78d8});
+R('skate','🛹','スケーター校長',/スケボー|スケートボード|ストリート|オーリー/,0,8,'えー、オーリー。','スケーター校長!','e:🛹,🤙;h',{h:['cap',0x111111],b:0x333333,k:['board',0xe0442f]});
+R('yoga','🧘','ヨガ校長',/ヨガ|瞑想|座禅|呼吸法|ストレッチ|マインドフル|深呼吸/,3,8,'えー、深呼吸をしましょう。吸って、吐いて。','ヨガ校長!','e:🧘,🌿;h',{b:0xa070d8,h:['band',0xa070d8]});
+R('astronomer','🔭','天文学者校長',/天体|望遠鏡|星座|流星|天の川|天文|惑星|日食|月食|彗星/,6,2,'えー、今夜は流星群が見られます。','天文学者校長!','e:🔭,🌠,✨;c:ffee88',{h:['cone',0x2a2a6a],b:0x2a2a6a,i:['stick',0x888888]});
+R('scientist','🔬','博士校長',/博士|研究|実験室|発明|ノーベル|白衣|科学者|フラスコ|論文/,9,0,'えー、これは世紀の大発見であります。','博士校長!','e:🔬,🧪,💡;c:88ffcc',{b:0xffffff,f:'goggles',i:['cup',0x5aff9a]});
+R('detective','🔍','名探偵校長',/探偵|推理|犯人|コナン|ホームズ|謎解き|真実はいつも/,4,4,'えー、犯人は…この中にいます。','名探偵校長!','e:🔍,🕵️,❓;h',{h:['cap',0x8a6a3a],b:0x8a6a3a,i:['lens',0x333333]});
+R('spy','🕶️','スパイ校長',/スパイ|007|ミッションインポッシブル|諜報|暗号|極秘|トップシークレット/,3,2,'えー、これは極秘情報であります。','スパイ校長!','e:🕶️,🤫;c:333333',{b:0x111111,f:'shades',i:['briefcase',0x333333]});
+R('magician','🎩','マジシャン校長',/マジシャン|魔術|イリュージョン|トランプ|ハト|種も仕掛けも|奇術/,0,9,'えー、種も仕掛けもございません。','マジシャン校長!','e:🎩,🃏,🕊️;c:ff66ff',{h:['top',0x111111],b:0x111111,k:['cape',0xc2201f],i:['wand',0xffffff]});
+R('firefighter','🚒','消防士校長',/消防|火事|119|火災|放水|消火|消防車/,6,3,'えー、火の用心。','消防士校長 出動!','e:🚒,🔥,🧯;c:ff6a1a',{h:['helm',0xd8202a],b:0xe8761a,i:['stick',0xd8202a]});
+R('pilot','✈️','機長校長',/パイロット|飛行機|空港|機長|ジャンボ|フライト|離陸|着陸|客室乗務員/,2,6,'えー、当機は間もなく離陸いたします。','機長校長 離陸!','e:✈️,☁️,🛫;h',{h:['cap',0x1a2a5a],b:0x1a2a5a,f:'shades'});
+R('train','🚃','駅長校長',/電車|新幹線|鉄道|駅員|ホーム|JR|のぞみ|鉄道好き/,3,6,'えー、白線の内側までお下がりください。','駅長校長 出発進行!','e:🚃,🚄,🚉;h',{h:['cap',0x1a2a5a],b:0x1a2a5a,i:['flag',0xd8202a]});
+R('teacher','👩‍🏫','先生校長',/教師|黒板|チョーク|授業|教壇|担任|教科書|出席簿/,8,0,'えー、教科書の38ページを開いてください。','先生校長!','e:📖,✏️,🍎;c:ffffff',{b:0x4a4a6a,f:'glasses',i:['stick',0xc8963a]});
+R('painter','🎨','画家校長',/絵画|画家|美術|絵の具|ゴッホ|ピカソ|モナリザ|キャンバス|水彩|油絵/,6,4,'えー、これは私が描いた校長自画像であります。','画家校長!','e:🎨,🖌️,🖼️;c:ff6aa8',{h:['beret',0xd8202a],b:0xffffff,i:['palette',0xf0c070]});
+R('conductor','🎼','指揮者校長',/指揮者|オーケストラ|クラシック|交響曲|ベートーベン|モーツァルト|バッハ|タクト|演奏会/,9,2,'えー、第九を指揮します。','指揮者校長!','e:🎼,🎻,🎹;h',{b:0x111111,a:0xffffff,i:['stick',0xffffff],f:'mustache'});
+R('rocker','🎸','ロッカー校長',/ロックバンド|ロックンロール|パンク|メタル|エレキギター|ヘビメタ|バンドマン|ライブハウス/,0,12,'えー、ロックンロール!','ロッカー校長!','e:🎸,🤘,🔥;h;k',{h:['mohawk',0xff2a8a],b:0x111111,f:'shades',i:['guitar',0xd8202a]});
+R('dj','🎧','DJ校長',/DJ|ディージェイ|クラブ|EDM|ミキサー|ターンテーブル|ヒップホップ|ラップ|ビートボックス/i,0,11,'えー、ブチ上げていきましょう。','DJ校長!','e:🎧,🎶,🔊;h',{h:['cap',0x111111],f:'shades',b:0x2a2a2a,i:['plate',0x111111]});
+R('monk','🪷','僧侶校長',/お坊さん|僧侶|お寺|除夜の鐘|お経|仏像|阿弥陀|念仏|大仏|禅寺|木魚/,12,0,'えー、色即是空、空即是色であります。','僧侶校長 読経!','e:🪷,🔔,🙏;c:ffaa33',{b:0xe08a1a,i:['stick',0x7a4a2a]});
+R('priest','⛩️','神主校長',/神社|神主|お参り|お祓い|おみくじ|賽銭|鳥居|巫女|厄払い/,6,2,'えー、二礼二拍手一礼であります。','神主校長 お祓い!','e:⛩️,🎍,🙏;c:ffffff',{h:['eboshi',0x111111],b:0xffffff,i:['wand',0xffffff]});
+R('rakugo','🎙️','落語家校長',/落語|寄席|落語家|笑点|座布団|漫談|大喜利|寿限無/,0,9,'えー、毎度ばかばかしいお笑いを一席。','落語家校長!','e:🎙️,😂,🪭;h',{b:0x6a3a8a,i:['fan',0xffffff]});
+R('cowboy','🤠','カウボーイ校長',/カウボーイ|西部劇|ロデオ|保安官|荒野|ウエスタン|馬に乗/,0,6,'えー、この町は、わしが守る。','カウボーイ校長!','e:🤠,🐎,🌵;h',{h:['top',0x8a5a2a],b:0xc8963a,i:['stick',0x7a4a2a]});
+R('viking','⚔️','バイキング校長',/バイキング|ヴァイキング|北欧|オーディン|ソーセージ/,2,2,'えー、略奪ではなく、朝礼であります。','バイキング校長!','e:⚔️,🪓,🛡️;c:ccddee',{h:['horns',0xffffff],b:0x7a5a3a,i:['hammer',0x888888]});
+R('knight','🛡️','騎士校長',/騎士|ナイト|中世|お城|ドラゴン退治|聖剣|エクスカリバー|円卓/,4,4,'えー、我、聖剣を抜かん。','騎士校長!','e:🛡️,⚔️,🏰;c:ccddee',{h:['helm',0xc0c8d8],b:0xc0c8d8,i:['sword',0xe8eef8],k:['cape',0xd8202a]});
+R('fairy','🧚','妖精校長',/妖精|フェアリー|ティンカーベル|魔法の粉|おとぎ話|ピクシー|花の精/,0,10,'えー、妖精さんが、お手伝いしてくれました。','妖精校長!','e:🧚,✨,🌸;w:sakura',{b:0xa0f0c0,i:['wand',0xffee66],k:['wings',0xe0ffff]});
+R('mermaid','🧜','人魚校長',/人魚|マーメイド|海の底|貝殻|深海の姫|アリエル|人魚姫/,0,8,'えー、海の底からやってまいりました。','人魚校長!','e:🧜,🐚,🫧;c:66ccff',{h:['crown',0x66d0ff],b:0x2aaab8,k:['tail',0x2aaab8]});
+R('dragonsuit','🐲','龍校長',/辰年|龍|ドラゴンボール|昇り龍|龍神|青龍/,2,4,'えー、龍の如く、天に昇ります。','龍校長!','e:🐲,🔥,🌩️;c:ff4422',{h:['horns',0xffd23a],b:0x2a8a4a,k:['tail',0x2a8a4a]});
+R('unicorn','🦄','ユニコーン校長',/ユニコーン|虹色|ゆめかわ|パステル|ファンシー|一角獣/,0,10,'えー、虹色の朝礼であります。','ユニコーン校長!','e:🦄,🌈,💖;h',{h:['horns',0xffffff],b:0xffe0f0,k:['tail',0xff88cc]});
+R('panda','🐼','パンダ校長',/パンダ|シャンシャン|笹|ジャイアントパンダ|上野動物園|タケノコ/,0,12,'えー、笹を食べながら、お話しします。','パンダ校長!','e:🐼,🎋,🍃;h',{h:['earsRound',0x111111],b:0xffffff,f:'patch'});
+R('rabbit','🐰','うさぎ校長',/うさぎ|ウサギ|兎|月見|バニー|ミッフィー|ぴょんぴょん|ピーターラビット/,0,12,'えー、ぴょんぴょん、月見であります。','うさぎ校長!','e:🐰,🥕,🌕;h',{h:['ears',0xffffff],b:0xffffff,k:['tail',0xffffff]});
+R('frog','🐸','カエル校長',/カエル|蛙|ケロケロ|おたまじゃくし|雨蛙|ガマ|ゲコゲコ/,0,6,'えー、ケロケロ。梅雨の季節であります。','カエル校長!','e:🐸,💧,🍃;w:rain',{h:['earsRound',0x4ac84a],b:0x4ac84a,f:'glasses'});
+R('penguin','🐧','ペンギン校長',/ペンギン|南極|皇帝ペンギン|氷河|ヨチヨチ|アデリー/,0,10,'えー、南極は、ペンギンだらけであります。','ペンギン校長!','e:🐧,🧊,🐟;w:snow',{h:['beak',0xffaa22],b:0x111111,a:0xffffff});
+R('lion','🦁','ライオン校長',/ライオン|百獣の王|たてがみ|サバンナ|ライオンキング|ガオー|ネコ科/,0,6,'えー、がおー。校長は百獣の王であります。','ライオン校長!','e:🦁,🌅,🐾;k',{h:['mane',0xc8761a],b:0xc8963a});
+R('monkey','🐵','おさる校長',/サル|猿|バナナ|ゴリラ|おさる|モンキー|西遊記|孫悟空|ウキウキ/,0,10,'えー、ウキキ。バナナをどうぞ。','おさる校長!','e:🐵,🍌,🙈;h',{h:['earsRound',0x8a5a2a],b:0x8a5a2a,i:['plate',0xffe03a]});
+R('chick','🐥','ひよこ校長',/ひよこ|ニワトリ|にわとり|卵|たまご|ヒヨコ|コケコッコー|目玉焼き/,0,10,'えー、コケコッコー、朝であります。','ひよこ校長!','e:🐥,🥚,🐓;h',{h:['beak',0xff8a22],b:0xffe03a});
+R('octopus','🐙','タコ校長',/タコ|イカ|クラゲ|イソギンチャク|エビ|カニ|ウニ/,0,6,'えー、八本の足で、お話しします。','タコ校長!','e:🐙,🌊,🦑;c:ff4466',{h:['dome',0xd8302a],b:0xd8302a,k:['tail',0xd8302a]});
+R('snowman','⛄','雪だるま校長',/スノーマン|アナと雪の女王|ありのままで|雪遊び|雪合戦|かまくら|オラフ/,0,8,'えー、雪だるまを作りましょう。','雪だるま校長!','e:⛄,❄️,🥕;w:snow',{h:['top',0x222222],b:0xffffff,f:'nose'});
+R('mummy','🧟','ミイラ校長',/ミイラ|包帯|ゾンビ映画|エジプト|ピラミッド|ツタンカーメン|ファラオ/,3,3,'えー…数千年ぶりの朝礼であります。','ミイラ校長!','e:🧟,🏺,☠️;c:ccbb88',{b:0xe8e0c0,h:['band',0xe8e0c0],f:'patch'});
+R('devil','😈','悪魔校長',/悪魔|デビル|地獄|閻魔|サタン|悪の|ダークサイド|ダークヒーロー/,5,2,'えー、悪い子は、いねぇがー。','悪魔校長!','e:😈,🔥,👿;c:aa22cc',{h:['horns',0xd8202a],b:0x8a1a2a,i:['stick',0xd8202a],k:['cape',0x111111]});
+R('alien','👽','エイリアン校長',/エイリアン|火星人|宇宙の生命体|アブダクション|グレイ型|プレデター/,3,6,'えー、ワレワレハ、ウチュウジンダ。','エイリアン校長!','e:👽,🛸,🌌;c:66ff66',{h:['antenna',0x44ff66],b:0x44ff66,f:'goggles'});
+R('explorer','🧭','探検家校長',/探検|冒険家|ジャングル|秘境|インディ・ジョーンズ|遺跡|トレジャー|未知の/,4,6,'えー、未知なる世界へ、出発であります。','探検家校長!','e:🧭,🗺️,🌴;h',{h:['visor',0xe8d8a0],b:0xc8b070,k:['pack',0x8a5a2a],i:['stick',0x7a4a2a]});
+R('gardener','🌷','庭師校長',/花壇|ガーデン|園芸|チューリップ|バラ|フラワー|ガーデニング|菜の花|お花見|生け花/,2,6,'えー、花を育てることは、心を育てることであります。','庭師校長!','e:🌷,🌻,🦋;w:sakura',{h:['straw',0xe8c860],b:0x3a9a4a,i:['cup',0x66aaff]});
+R('construction','🚧','工事現場校長',/工事|建築|大工|現場|ダンプカー|ショベルカー|建設|足場/,8,3,'えー、本校舎は、本日も工事中であります。','工事現場校長!','e:🚧,🏗️,🔨;h',{h:['helm',0xffd23a],b:0xff8a1a,i:['hammer',0x888888]});
+R('postman','📮','郵便屋さん校長',/郵便|手紙|ポスト|郵便局|ハガキ|切手|飛脚|配達員/,4,4,'えー、お手紙が届いております。','郵便屋さん校長!','e:📮,✉️,💌;h',{h:['cap',0xd8202a],b:0xd8202a,k:['pack',0xd8a030]});
+R('delivery','📦','宅配校長',/宅配|荷物|配達|通販|アマゾン|Amazon|ネットショッピング|置き配|クロネコ/i,3,4,'えー、お届け物であります。サインをお願いします。','宅配校長!','e:📦,🚚,💨;h',{h:['cap',0x3a78d8],b:0x3a78d8,i:['box',0xc8963a]});
+R('waiter','🍽️','ウェイター校長',/ウェイター|レストランで|フレンチ|フルコース|ディナー|ワイン|おもてなし|給仕/,4,6,'えー、本日のコースをご案内いたします。','ウェイター校長!','e:🍽️,🍷,🥂;h',{b:0x111111,a:0xffffff,i:['tray',0xcccccc],f:'mustache'});
+R('butler','🎩','執事校長',/執事|メイド|ご主人様|お嬢様|お屋敷|召使い/,4,6,'えー、お嬢様、朝礼のお時間でございます。','執事校長!','e:🎩,🫖,🌹;h',{h:['top',0x111111],b:0x111111,a:0xffffff,f:'monocle'});
+R('diver','🤿','ダイバー校長',/ダイビング|潜水|サンゴ|深海|ダイバー|シュノーケル|珊瑚礁|海底/,2,6,'えー、深海1万メートルから、お届けします。','ダイバー校長!','e:🤿,🐠,🫧;c:66ccff',{f:'goggles',b:0x1a4a8a,k:['tank',0x888888]});
+R('timetravel','⏳','タイムトラベラー校長',/タイムマシン|タイムトラベル|未来から|過去に戻|タイムスリップ|時空|バックトゥ/,6,4,'えー、私は未来から来ました。','タイムトラベラー校長!','e:⏳,🌀,⌛;c:88aaff',{f:'goggles',b:0x6a6a8a,i:['lens',0xffd23a]});
+R('superhero','🦸','ヒーロー校長',/ヒーロー|スーパーマン|仮面ライダー|戦隊|ウルトラマン|アベンジャーズ|正義の味方|変身ベルト/,0,10,'えー、正義は必ず勝つのであります。','ヒーロー校長 参上!','e:🦸,💥,⭐;h;k',{f:'mask2',b:0xd8202a,k:['cape',0x3a78d8]});
+R('magicgirl','🪄','魔法少女校長',/魔法少女|プリキュア|セーラームーン|キラキラ|ステッキ|まどか|ハート型/,0,12,'えー、愛と勇気の、朝礼であります。','魔法少女校長!','e:🪄,💖,⭐;h;c:ff88cc',{h:['bow',0xff66aa],b:0xff88cc,i:['wand',0xffee66]});
+R('mascot','🎪','ゆるキャラ校長',/ゆるキャラ|マスコット|ふなっしー|くまモン|ひこにゃん|着ぐるみ|ご当地キャラ/,0,12,'えー、ゆるキャラ校長、略してゆるチョーです。','ゆるキャラ校長!','e:🎪,🎈,🎉;h',{h:['dome',0xffaa22],b:0xffaa22,k:['tail',0xffaa22]});
+R('gym','🏋️','体操服校長',/体操|ラジオ体操|体育|体操服|ブルマ|鉄棒|跳び箱|マット運動|器械体操/,3,5,'えー、ラジオ体操、第一。','体操服校長!','e:🏃,🤸,🎽;h',{h:['band',0xe0442f],b:0xffffff,a:0xe0442f});
+R('academic','🎓','博士号校長',/学位|大学|博士号|学会|卒論|修士|学士|大学院|ゼミ|研究室/,12,0,'えー、私の学位論文は、全900ページであります。','博士号校長!','e:🎓,📚,📝;c:222222',{h:['square',0x111111],b:0x111111,f:'glasses',i:['book',0xc2201f]});
+R('kimono','👘','着物校長',/着物|和服|袴|成人式|七五三|振袖|和装|日本舞踊|扇子/,4,6,'えー、日本の伝統美であります。','着物校長!','e:👘,🌸,🎎;w:sakura',{b:0xc2201f,a:0xffd23a,i:['fan',0xffffff]});
+R('onsen','♨️','温泉校長',/温泉|お風呂|銭湯|露天風呂|湯けむり|入浴|湯船|サウナ|ととのう/,0,13,'えー、極楽、極楽。','温泉校長!','e:♨️,🧖,🍶;c:ffffff',{h:['towel',0xffffff],b:0x3a6ac8,i:['cup',0xc8963a]});
+R('gamer','🎮','ゲーマー校長',/eスポーツ|FPS|ガチャ|課金|ゲーマー|プロゲーマー|ゲーミング|ガチ勢|フォートナイト|APEX|スプラ/i,0,12,'えー、本日の朝礼は、ランクマッチであります。','ゲーマー校長!','e:🎮,🕹️,👾;h;c:66ff99',{h:['helm',0x222222],f:'goggles',b:0x2a2a4a,i:['laptop',0x111111]});
+R('youtuber','📹','YouTuber校長',/動画|配信|チャンネル登録|ユーチューバー|TikTok|ティックトック|インスタ|バズ|いいね|ライブ配信/i,3,10,'えー、チャンネル登録、お願いします。','YouTuber校長!','e:📹,👍,🔔;h',{h:['cap',0xd8202a],f:'shades',b:0x222222,i:['camera',0x111111]});
+R('hacker','💻','ハッカー校長',/ハッカー|サイバー|ウイルス|パスワード|プログラマー|エンジニア|ソースコード|バグ|サーバー|ホワイトハット/,10,0,'えー、この学校のサーバーは、既に掌握しました。','ハッカー校長!','e:💻,👾,🔒;c:33ff66',{h:['helm',0x111111],b:0x111111,i:['laptop',0x333333]});
+R('salaryman','💼','サラリーマン校長',/会社|残業|出勤|会議|サラリーマン|満員電車|上司|部長|ボーナス|ネクタイ|プレゼン|営業/,11,0,'えー、来期の目標について、共有します。','サラリーマン校長!','e:💼,📈,☕;c:aaaaaa',{b:0x2a3a5a,f:'glasses',i:['briefcase',0x3a2a1a]});
+R('judge','⚖️','裁判官校長',/判決|裁判官|異議あり|検察|弁護士|被告|法廷|逆転裁判|有罪|無罪/,9,2,'えー、判決を言い渡します。','裁判官校長!','e:⚖️,🔨,👨‍⚖️;c:ffffff',{b:0x111111,f:'glasses',i:['hammer',0x7a4a2a]});
+R('campaign','📢','選挙校長',/立候補|当選|演説|街頭|選挙カー|マニフェスト|公約|議員|総理/,14,0,'えー、私に、一票を。','選挙校長 演説開始!','e:📢,🗳️,🇯🇵;h',{b:0x1a5ab8,i:['mega',0xdddddd],h:['band',0xffffff]});
+R('baby','👶','赤ちゃん校長',/赤ちゃん|おむつ|ミルク|ハイハイ|ベビー|おしゃぶり|ガラガラ|育児|だっこ/,0,12,'えー、ばぶー。','赤ちゃん校長!','e:👶,🍼,🧸;h',{h:['bonnet',0xffd0e0],b:0xffe0f0,i:['cup',0xffffff]});
+R('caveman','🍖','原始人校長',/原始人|石器|マンモス|はじめ人間|縄文人|狩り|骨付き肉|火おこし/,4,6,'えー、ウホウホ。火を、おこしました。','原始人校長!','e:🍖,🦣,🔥;c:ff8a33',{b:0x8a5a2a,i:['hammer',0x7a5a3a],h:['mohawk',0x3a2a1a]});
+R('scarecrow','🌾','かかし校長',/かかし|案山子|麦わら|稲刈り|秋の収穫|カラス|田園/,2,5,'えー、田んぼは、私が守ります。','かかし校長!','e:🌾,🐦‍⬛,🍂;h',{h:['straw',0xe8c860],b:0x8a6a3a,i:['stick',0x7a4a2a]});
+for(const c of COS2)mkCos(c.id,g=>buildSpec(g,c.spec));
+const COS_OLD_N=COS.length;
+COS.unshift(...COS2);
 const HINTS=['食べ物の話をすると、生徒が元気になるかも…','難しい言葉ほど、眠くなる…','特別な言葉を言わせると、校長先生がコスプレするかも!?','レア演出は運しだい。何度でも挑戦してみよう','季節・動物・スポーツ…意外な言葉に反応するかも','漢字だらけの言葉は、眠気が強い','「夏」「小学生」「宇宙」…さて、どうなるでしょう?','1人も倒れずに終わることもある…?'];
 
 /* ================= レア演出 ================= */
@@ -427,6 +596,16 @@ function applyFx(fx){
     case 'quake':quake=1;shake=.6;emo('📳',3);break;
     case 'petals':setWeather('sakura');emo('🌸',5);break;
     case 'bats':emo('🦇',6);emo('🎃',3);break;
+    default:genericFx(fx);
+  }
+}
+function genericFx(fx){
+  for(const tok of fx.split(';')){
+    if(tok.startsWith('e:'))tok.slice(2).split(',').forEach(e=>emo(e,3));
+    else if(tok==='h')cheer=.7;
+    else if(tok==='k')shake=.5;
+    else if(tok.startsWith('c:'))burst(0,3.5,-9.5,parseInt(tok.slice(2),16),50,5,1.5,2);
+    else if(tok.startsWith('w:'))setWeather(tok.slice(2));
   }
 }
 function clearEvents(){
@@ -461,7 +640,16 @@ const ACH=[
  ['rare1','✨','初めてのレア','レア演出を見た'],['rare5','💎','レアコレクター','5種類のレア演出を見た'],['rare12','🏆','レアマスター','12種類のレア演出を見た'],['star3','🌠','★3の輝き','★★★のレアを見た'],['star4','🌈','超激レア!','★★★★の超激レアを見た'],
  ['kw10','📚','博識な校長','10種類のキーワードを試した'],['kw30','📖','広辞苑校長','30種類のキーワードを試した'],['long','📜','長文校長','20文字以上のキーワードを入力した'],['sdgs','♻️','持続可能な眠気','SDGsを使った'],['saigo','🔁','最後にと言ってまだ続ける','「最後に」を使った'],
  ['heal','🙏','ありがたい朝礼','天使/神様/虹で、ほとんど倒れなかった'],['combo','🎰','役満','コスプレとレア演出が同時に発生した'],
+ ['cos50','🧥','ファッションリーダー','50種類のコスプレ/イベントを見た'],['cos80','👔','衣装持ちの極み','80種類のコスプレ/イベントを見た'],['cos100','🌟','コスプレの神','100種類のコスプレ/イベントを見た'],
+ ['rare21','👁️','レア全制覇','全てのレア演出を見た'],['kw50','🗃️','言葉の達人','50種類のキーワードを試した'],['kw100','🏛️','言霊マスター','100種類のキーワードを試した'],
 ];
+// ---- キーワード・演出ごとの実績を自動生成 ----
+ACH.forEach(a=>a[4]='基本');
+const ex=re=>re.source.split('|').slice(0,3).join('・');
+for(const c of COS)ACH.push(['c_'+c.id,c.icon,c.lbl,`「${ex(c.re)}」などの言葉で発生`,'コスプレ・イベント']);
+for(const r of RARES)ACH.push(['r_'+r.id,r.icon,r.name,`RARE ${'★'.repeat(r.stars)} を見た`,'レア演出']);
+{const seen=new Set();for(const r of KW){if(seen.has(r[1]))continue;seen.add(r[1]);ACH.push(['k_'+r[1],'🔑',r[1]+'の話',`「${ex(r[0])}」などを話させた`,'キーワード']);}}
+const EFFECT_N=COS.length+RARES.length;
 let got={},life={w:[],cos:[],rare:[],kw:[]};
 try{got=JSON.parse(localStorage.getItem('kocho_ach2')||'{}');life=Object.assign(life,JSON.parse(localStorage.getItem('kocho_life2')||'{}'));}catch(e){}
 const saveAll=()=>{try{localStorage.setItem('kocho_ach2',JSON.stringify(got));localStorage.setItem('kocho_life2',JSON.stringify(life));}catch(e){}};
@@ -469,7 +657,10 @@ let toastQ=[],toastBusy=false,runUnlocked=[];
 function unlock(id){if(got[id])return;const a=ACH.find(x=>x[0]===id);if(!a)return;got[id]=Date.now();saveAll();runUnlocked.push(a);toastQ.push(a);sfx('ach');nextToast();}
 function nextToast(){if(toastBusy||!toastQ.length)return;toastBusy=true;const a=toastQ.shift();$('tIc').textContent=a[1];$('tName').textContent='実績解除: '+a[2];$('tDesc').textContent=a[3];$('toast').classList.add('on');
   setTimeout(()=>{$('toast').classList.remove('on');setTimeout(()=>{toastBusy=false;nextToast();},400);},2400);}
-function renderAch(){const n=Object.keys(got).length;$('achN').textContent=`${n}/${ACH.length}`;$('achList').innerHTML=ACH.map(a=>`<div class="a ${got[a[0]]?'':'lock'}"><span class="ic">${got[a[0]]?a[1]:'❓'}</span><div>${got[a[0]]?a[2]:'？？？'}<small>${a[3]}</small></div></div>`).join('');}
+function renderAch(){const n=Object.keys(got).filter(k=>ACH.some(a=>a[0]===k)).length;$('achN').textContent=`${n}/${ACH.length}`;
+  const cats=['基本','コスプレ・イベント','レア演出','キーワード'];let h='';
+  for(const c of cats){const l=ACH.filter(a=>a[4]===c),g=l.filter(a=>got[a[0]]).length;h+=`<h3 style="margin:10px 0 4px">${c} ${g}/${l.length}</h3>`+l.map(a=>`<div class="a ${got[a[0]]?'':'lock'}"><span class="ic">${got[a[0]]?a[1]:'❓'}</span><div>${got[a[0]]?a[2]:'？？？'}<small>${a[3]}</small></div></div>`).join('');}
+  $('achList').innerHTML=h;}
 const addLife=(k,v)=>{if(!life[k].includes(v)){life[k].push(v);saveAll();}};
 
 /* ================= 解析 ================= */
@@ -554,12 +745,12 @@ function endRun(){
   const n=students.filter(s=>s.state!=='ok'&&!s.gone).length;resultN=n;
   if(n>=1)unlock('first');if(n>=10)unlock('ten');if(n>=30)unlock('thirty');if(n>=50)unlock('fifty');if(n>=70)unlock('seventy');if(n>=80)unlock('biggun');if(n>=100)unlock('all');if(n===0)unlock('zero');
   const info=plan.info;addLife('kw','__'+plan.kw);
-  const kwN=life.kw.filter(x=>x.startsWith('__')).length;if(kwN>=10)unlock('kw10');if(kwN>=30)unlock('kw30');
+  const kwN=life.kw.filter(x=>x.startsWith('__')).length;if(kwN>=10)unlock('kw10');if(kwN>=30)unlock('kw30');if(kwN>=50)unlock('kw50');if(kwN>=100)unlock('kw100');for(const nm of new Set(info.names))unlock('k_'+nm);
   if(plan.kw.length>=20)unlock('long');if(info.names.includes('SDGs'))unlock('sdgs');if(info.names.includes('最後に'))unlock('saigo');
-  if(plan.cos){const c=plan.cos;unlock('cos1');if(MAPA[c.id])unlock(MAPA[c.id]);if(['summer','winter','rain','wind'].includes(c.id))addLife('w',c.id);
-    const k=life.cos.length;if(k>=5)unlock('cos5');if(k>=15)unlock('cos15');if(k>=30)unlock('cos30');
+  if(plan.cos){const c=plan.cos;unlock('cos1');unlock('c_'+c.id);if(MAPA[c.id])unlock(MAPA[c.id]);if(['summer','winter','rain','wind'].includes(c.id))addLife('w',c.id);
+    const k=life.cos.length;if(k>=5)unlock('cos5');if(k>=15)unlock('cos15');if(k>=30)unlock('cos30');if(k>=50)unlock('cos50');if(k>=80)unlock('cos80');if(k>=100)unlock('cos100');
     if(['summer','winter','rain','wind'].every(x=>life.w.includes(x)))unlock('wind');}
-  if(plan.rare){const r=plan.rare;addLife('rare',r.id);unlock('rare1');const rk=life.rare.length;if(rk>=5)unlock('rare5');if(rk>=12)unlock('rare12');if(r.stars>=3)unlock('star3');if(r.stars>=4)unlock('star4');
+  if(plan.rare){const r=plan.rare;addLife('rare',r.id);unlock('rare1');unlock('r_'+r.id);if(life.rare.length>=RARES.length)unlock('rare21');const rk=life.rare.length;if(rk>=5)unlock('rare5');if(rk>=12)unlock('rare12');if(r.stars>=3)unlock('star3');if(r.stars>=4)unlock('star4');
     if(['angel','god','rainbow'].includes(r.id)&&n<=10)unlock('heal');if(plan.cos)unlock('combo');}
   let best=0;try{best=+(localStorage.getItem('kocho_best2')||0);if(n>best)localStorage.setItem('kocho_best2',n);}catch(e){}
   $('resKw').textContent=`キーワード『${plan.kw}』`;$('score').textContent=n+'人';
@@ -619,6 +810,7 @@ $('achBtn').onclick=showAch;$('bAch2').onclick=showAch;$('bAch3').onclick=showAc
 $('bShare').onclick=()=>{const t=`校長先生の『${plan.kw}』の話で、全校生徒${resultN}人が倒れた!`;const u=location.href.split('?')[0];
   if(navigator.share)navigator.share({title:'校長先生のお話が長すぎる',text:t,url:u}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+u).then(()=>{$('bShare').textContent='コピーしました'});};
 try{if(localStorage.getItem('kocho_best2'))$('best').textContent=`最高記録: ${localStorage.getItem('kocho_best2')}人`;}catch(e){}
+const bt=$('best');bt.innerHTML=(bt.textContent?bt.textContent+'<br>':'')+`演出 ${EFFECT_N}種類 / 実績 ${ACH.length}個`;
 canvas.addEventListener('pointerdown',e=>{initAudio();
   if(kids.length){const ray=new THREE.Raycaster(),nd=new THREE.Vector2(e.clientX/innerWidth*2-1,-(e.clientY/innerHeight)*2+1);ray.setFromCamera(nd,camera);
     const hit=ray.intersectObjects(kids,true);if(hit.length){unlock('findkid');capShow('🎒 みつけた!');burst(hit[0].point.x,hit[0].point.y,hit[0].point.z,0xffd23a,24,4);return;}}
